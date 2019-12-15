@@ -1,1 +1,1 @@
-# <b>Quizer</b> project is starting soon!
+# Quizer project is starting soon!
