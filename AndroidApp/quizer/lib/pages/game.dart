@@ -15,7 +15,7 @@ class _GameState extends State<Game> {
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments; // received arguments from loading route
     questions = data['questions'];
-    print(questions);
+    print(questions[0].question);
     
     return Scaffold(
       appBar: AppBar(title: Text("Quizer"),),
