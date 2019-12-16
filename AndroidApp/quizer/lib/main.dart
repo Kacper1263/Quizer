@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizer/pages/game.dart';
 import 'package:quizer/pages/home.dart';
 import 'package:quizer/pages/loading.dart';
 
@@ -7,7 +8,8 @@ void main() => runApp(MaterialApp(
   initialRoute: '/',
   routes: {
     '/': (context) => Home(),
-    '/loading': (context) => Loading()
+    '/loading': (context) => Loading(),
+    '/game': (context) => Game(),
   },
   theme: ThemeData(          // Add the 3 lines from here... 
         primaryColor: Colors.grey[850],
