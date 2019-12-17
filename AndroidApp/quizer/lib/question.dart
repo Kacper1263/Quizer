@@ -1,6 +1,7 @@
 import 'package:http/http.dart';
 
 class Question {
+  int id;
   String question; // Actual question
   String img; // Url to image e.g. https://server:8000/img/cat.jpg
   String answer1;
