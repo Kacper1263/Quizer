@@ -16,10 +16,14 @@ class _GameState extends State<Game> {
     data = ModalRoute.of(context).settings.arguments; // received arguments from loading route
     questions = data['questions'];
     print(questions[0].question);
-    
-    return Scaffold(
-      appBar: AppBar(title: Text("Quizer"),),
 
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Quizer"),
+      ),
+      body: Container(
+        color: Colors.grey[900],
+      ),
     );
   }
 }
