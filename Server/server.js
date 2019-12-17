@@ -23,6 +23,7 @@ var localtunnelEnabled = false;
 var tunnelUrlList = []
 var adminPassword = randomFromZeroToNine() + randomFromZeroToNine() + randomFromZeroToNine() + randomFromZeroToNine() //Generate 4 random numbers
 var databaseName = "questions"
+var apiPort = 5000;
 //#endregion
 
 //#region Get data from config
@@ -33,6 +34,7 @@ try{
     tunnelUrlList = cfg.tunnelUrlList
     adminPassword = cfg.adminPassword
     databaseName = cfg.databaseName
+    apiPort = cfg.apiPort
 }catch(e){
     //Create config if not exist
     if(!fs.existsSync("./config.json")){
@@ -40,7 +42,8 @@ try{
             localtunnelEnabled: localtunnelEnabled,
             tunnelUrlList: tunnelUrlList,
             adminPassword: adminPassword,
-            databaseName: databaseName
+            databaseName: databaseName,
+            apiPort: apiPort
         }
         data = JSON.stringify(data, null, 2)
         fs.writeFileSync("./config.json", data)
@@ -57,6 +60,32 @@ const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync') 
 const adapter = new FileSync(`${databaseName}.json`)
 const db = low(adapter)
+
+// *****************************
+// *   API starts from there   *
+// *****************************
+
+db.defaults({ questions: [] }).write() //default variables for database
+
+// Set up the express app
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+//Routes API v1
+var routes_v1 = require('./routes/v1/index')
+app.use("/api/v1/status", routes_v1.status)
+app.use("/api/v1/apk", routes_v1.apk)
+app.use("/api/v1/questions", routes_v1.questions)
+
+//404
+app.use(function(req, res){
+    res.status(404).send({success: 'false', code: 404, message: "Page not found! Bad API route!"});
+});
+  
+app.listen(apiPort, () => {
+    console.log(`API running on port ${apiPort}`)
+});
 
 
 function randomFromZeroToNine(){
