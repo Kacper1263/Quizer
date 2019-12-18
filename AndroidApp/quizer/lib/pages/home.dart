@@ -36,7 +36,9 @@ class _HomeState extends State<Home> {
             OutlineButton(
               child: Text("Play", style: TextStyle(color: Colors.white)),
               onPressed: () {
-                Navigator.pushNamed(context, '/loading');
+                Navigator.pushNamed(context, '/loading', arguments: {
+                  "url": ipController.text
+                });
               },
               borderSide: BorderSide(color: Colors.grey[400]),
             ),

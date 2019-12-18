@@ -62,9 +62,10 @@ try{
 const localtunnel = require('localtunnel')
 var tunnelSubdomain = tunnelUrl[0] || ""
 if(tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
+
 //#region localtunnel stuff
+console.log("Starting tunnel and API...")
 var tunnel = localtunnel(tunnelPort, {subdomain: tunnelSubdomain, host: "http://localtunnel.me"}, function(err,tunnel){
-    console.log("Starting tunnel...")
     if(err){
       console.log("Error while creating tunnel: " + err);
       process.exit();

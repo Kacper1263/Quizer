@@ -10,8 +10,11 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
   String loadingText = "Downloading\nquestions";
-
+  Map data = {};
   void getQuestions() async{
+    //Test server connection
+    // TODO: wait for build end
+    print(data['url']);
     List<Question> _questions = await Question.downloadQuestions();
 
     Navigator.pushReplacementNamed(context, "/game",
@@ -26,6 +29,7 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context).settings.arguments; // received arguments from home route
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
