@@ -20,10 +20,11 @@ const lt = require('localtunnel')
 
 //#region Config variables
 var localtunnelEnabled = false;
-var tunnelUrlList = []
+var tunnelUrl = ""
 var adminPassword = randomFromZeroToNine() + randomFromZeroToNine() + randomFromZeroToNine() + randomFromZeroToNine() //Generate 4 random numbers
 var databaseName = "questions"
 var apiPort = 5000;
+var tunnelPort = 5000  
 //#endregion
 
 //#region Get data from config
@@ -31,19 +32,21 @@ try{
     var cfg = fs.readFileSync("./config.json")
     cfg = JSON.parse(cfg)
     localtunnelEnabled = cfg.localtunnelEnabled
-    tunnelUrlList = cfg.tunnelUrlList
+    tunnelUrl = cfg.tunnelUrl
     adminPassword = cfg.adminPassword
     databaseName = cfg.databaseName
     apiPort = cfg.apiPort
+    tunnelPort = cfg.tunnelPort
 }catch(e){
     //Create config if not exist
     if(!fs.existsSync("./config.json")){
         var data = {
             localtunnelEnabled: localtunnelEnabled,
-            tunnelUrlList: tunnelUrlList,
+            tunnelUrl: tunnelUrl,
             adminPassword: adminPassword,
             databaseName: databaseName,
-            apiPort: apiPort
+            apiPort: apiPort,
+            tunnelPort: tunnelPort
         }
         data = JSON.stringify(data, null, 2)
         fs.writeFileSync("./config.json", data)
@@ -54,6 +57,59 @@ try{
         return readline.keyInPause("\nProgram ended...")
     }
 }
+//#endregion
+
+const localtunnel = require('localtunnel')
+var tunnelSubdomain = tunnelUrl[0] || ""
+if(tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
+//#region localtunnel stuff
+var tunnel = localtunnel(tunnelPort, {subdomain: tunnelSubdomain, host: "http://localtunnel.me"}, function(err,tunnel){
+    console.log("Starting tunnel...")
+    if(err){
+      console.log("Error while creating tunnel: " + err);
+      process.exit();
+    }
+  
+    console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
+  
+    if(tunnelSubdomain == "") tunnelUrlUWant = tunnel.url
+
+    if(tunnel.url != tunnelUrlUWant){
+      console.log("Error! Subdomain in use!");
+      process.exit();
+    }
+  
+    console.log("");
+});
+tunnel.on('close', function(){
+    console.log("Tunnel closed!");
+    process.exit();
+});
+var restartingTunnel = false;
+tunnel.on('error', function(err){ 
+    if(restartingTunnel) return;
+    restartingTunnel = true;
+    console.log("Error on tunnel. Err: " + err);
+    console.log();
+    console.log("Restarting tunnel...");
+    
+    tunnel = localtunnel(tunnelPort, {subdomain: tunnelSubdomain}, function(err,tunnel){
+      if(err){
+        console.log("Error while creating tunnel: " + err);
+        process.exit();
+      }
+    
+      console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
+      
+      if(tunnel.url != tunnelUrlUWant){
+        console.log("Error! Subdomain in use!");
+        process.exit();
+      }
+      
+      console.log("");
+      restartingTunnel = false;
+    });
+});
 //#endregion
 
 const low = require('lowdb')
