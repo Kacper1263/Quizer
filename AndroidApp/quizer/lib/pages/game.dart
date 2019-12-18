@@ -15,7 +15,6 @@ class _GameState extends State<Game> {
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments; // received arguments from loading route
     questions = data['questions'];
-    print(questions[0].question);
 
     return Scaffold(
       appBar: AppBar(
@@ -23,6 +22,12 @@ class _GameState extends State<Game> {
       ),
       body: Container(
         color: Colors.grey[900],
+        child: ListView(
+          padding: const EdgeInsets.all(8),
+          children: <Widget>[
+            Text(questions[0].question, style: TextStyle(color: Colors.white, fontSize: 30))
+          ]          
+        ),
       ),
     );
   }

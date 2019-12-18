@@ -1,5 +1,5 @@
 //Check are required packages installed
-try{
+try {
     require('express')
     require('body-parser')
     require('fs')
@@ -7,7 +7,7 @@ try{
     require('lowdb')
     require('readline-sync')
     require('localtunnel')
-}catch(e){
+} catch (e) {
     return console.log(`\n   You don't have required packages! \n\n   Use "npm i" to install them! \n\n`)
 }
 
@@ -24,11 +24,11 @@ var tunnelUrl = ""
 var adminPassword = randomFromZeroToNine() + randomFromZeroToNine() + randomFromZeroToNine() + randomFromZeroToNine() //Generate 4 random numbers
 var databaseName = "questions"
 var apiPort = 5000;
-var tunnelPort = 5000  
+var tunnelPort = 5000
 //#endregion
 
 //#region Get data from config
-try{
+try {
     var cfg = fs.readFileSync("./config.json")
     cfg = JSON.parse(cfg)
     localtunnelEnabled = cfg.localtunnelEnabled
@@ -37,9 +37,9 @@ try{
     databaseName = cfg.databaseName
     apiPort = cfg.apiPort
     tunnelPort = cfg.tunnelPort
-}catch(e){
+} catch (e) {
     //Create config if not exist
-    if(!fs.existsSync("./config.json")){
+    if (!fs.existsSync("./config.json")) {
         var data = {
             localtunnelEnabled: localtunnelEnabled,
             tunnelUrl: tunnelUrl,
@@ -52,7 +52,7 @@ try{
         fs.writeFileSync("./config.json", data)
         console.log("Config file created, you can now edit it")
         return readline.keyInPause("\nProgram ended...")
-    }else{
+    } else {
         console.log("Error occurred: " + e + "\n\nYou can try to delete config file")
         return readline.keyInPause("\nProgram ended...")
     }
@@ -61,60 +61,70 @@ try{
 
 const localtunnel = require('localtunnel')
 var tunnelSubdomain = tunnelUrl[0] || ""
-if(tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
+if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
 
 //#region localtunnel stuff
-console.log("Starting tunnel and API...")
-var tunnel = localtunnel(tunnelPort, {subdomain: tunnelSubdomain, host: "http://localtunnel.me"}, function(err,tunnel){
-    if(err){
-      console.log("Error while creating tunnel: " + err);
-      process.exit();
-    }
-  
-    console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
-  
-    if(tunnelSubdomain == "") tunnelUrlUWant = tunnel.url
+if (localtunnelEnabled) {
+    console.log("Starting API and tunnel...")
+    var tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain, host: "http://localtunnel.me"}, function (err, tunnel) {
+        if (err) {
+            console.log("Error while creating tunnel: " + err);
+            readline.keyInPause("\nProgram ended...")
+            process.exit();
+        }
 
-    if(tunnel.url != tunnelUrlUWant){
-      console.log("Error! Subdomain in use!");
-      process.exit();
-    }
-  
-    console.log("");
-});
-tunnel.on('close', function(){
-    console.log("Tunnel closed!");
-    process.exit();
-});
-var restartingTunnel = false;
-tunnel.on('error', function(err){ 
-    if(restartingTunnel) return;
-    restartingTunnel = true;
-    console.log("Error on tunnel. Err: " + err);
-    console.log();
-    console.log("Restarting tunnel...");
-    
-    tunnel = localtunnel(tunnelPort, {subdomain: tunnelSubdomain}, function(err,tunnel){
-      if(err){
-        console.log("Error while creating tunnel: " + err);
-        process.exit();
-      }
-    
-      console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
-      
-      if(tunnel.url != tunnelUrlUWant){
-        console.log("Error! Subdomain in use!");
-        process.exit();
-      }
-      
-      console.log("");
-      restartingTunnel = false;
+        console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
+
+        if (tunnelSubdomain == "") tunnelUrlUWant = tunnel.url
+
+        if (tunnel.url != tunnelUrlUWant) {
+            console.log("Error! Subdomain in use!");
+            readline.keyInPause("\nProgram ended...")
+            process.exit();
+        }
+
+        console.log("");
     });
-});
+    tunnel.on('close', function () {
+        console.log("Tunnel closed!");
+        readline.keyInPause("\nProgram ended...")
+        process.exit();
+    });
+    var restartingTunnel = false;
+    tunnel.on('error', function (err) {
+        if (restartingTunnel) return;
+        restartingTunnel = true;
+        console.log("Error on tunnel. Err: " + err);
+        console.log();
+        console.log("Restarting tunnel...");
+
+        tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain }, function (err, tunnel) {
+            if (err) {
+                console.log("Error while creating tunnel: " + err);
+                readline.keyInPause("\nProgram ended...")
+                process.exit();
+            }
+
+            console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
+
+            if (tunnel.url != tunnelUrlUWant) {
+                console.log("Error! Subdomain in use!");
+                readline.keyInPause("\nProgram ended...")
+                process.exit();
+            }
+
+            console.log("");
+            restartingTunnel = false;
+        });
+    });
+}
+else{
+    console.log("Starting only API...")
+}
 //#endregion
 
 const low = require('lowdb')
-const FileSync = require('lowdb/adapters/FileSync') 
+const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync(`${databaseName}.json`)
 const db = low(adapter)
 
@@ -136,15 +146,15 @@ app.use("/api/v1/apk", routes_v1.apk)
 app.use("/api/v1/questions", routes_v1.questions)
 
 //404
-app.use(function(req, res){
-    res.status(404).send({success: 'false', code: 404, message: "Page not found! Bad API route!"});
+app.use(function (req, res) {
+    res.status(404).send({ success: 'false', code: 404, message: "Page not found! Bad API route!" });
 });
-  
+
 app.listen(apiPort, () => {
     console.log(`API running on port ${apiPort}`)
 });
 
 
-function randomFromZeroToNine(){
+function randomFromZeroToNine() {
     return Math.floor(Math.random() * 10).toString();
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -36,9 +37,14 @@ class _HomeState extends State<Home> {
             OutlineButton(
               child: Text("Play", style: TextStyle(color: Colors.white)),
               onPressed: () {
-                Navigator.pushNamed(context, '/loading', arguments: {
-                  "url": ipController.text
-                });
+                if(ipController.text != "" && ipController.text != null){
+                  Navigator.pushNamed(context, '/loading', arguments: {
+                    "url": ipController.text
+                  });
+                }     
+                else{
+                  Fluttertoast.showToast(msg: "You must provide URL of server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                }           
               },
               borderSide: BorderSide(color: Colors.grey[400]),
             ),
