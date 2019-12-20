@@ -29,12 +29,26 @@ class _LoadingState extends State<Loading> {
       if(http != "http://" && https != "https://") url = "http://$url";
 
       //Test server connection
-      loadingText = "Connecting\nto\nserver";
+      setState(() {
+        loadingText = "Connecting\nto\nserver";
+      });      
       Response response = await get(url+"/api/v1/status").timeout(Duration(seconds: 60));
       Map responseJson = jsonDecode(response.body);
       if(responseJson['success'] == "true"){
-        List<Question> _questions = await Question.downloadQuestions(url);
-        Navigator.pushReplacementNamed(context, "/game", arguments: {"questions": _questions});
+        List<Question> _questions;
+
+        setState(() {
+          loadingText = "Downloading\nquestions";
+        });     
+
+        var res = await Question.downloadQuestions(url);
+        if(res["success"] == true){
+          _questions = res["questions"];
+          Navigator.pushReplacementNamed(context, "/game", arguments: {"questions": _questions, "score": 0, "questionNow": 0});
+        }else{
+          Fluttertoast.showToast(msg: "Error: ${res["message"]}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+          Navigator.pop(context);
+        }        
       }   
     }catch(e){
       if(e.toString().startsWith("TimeoutException after")){
