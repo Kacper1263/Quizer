@@ -36,7 +36,7 @@ router.get("/all", (req, res) => {
     res.status(200).send({
         success: "true",
         message: "OK",
-        content: db.value()
+        content: db.get("questions").value()
     })
 })
 
