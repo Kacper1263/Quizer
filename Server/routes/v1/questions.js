@@ -31,12 +31,58 @@ const db = low(adapter)
 
 db.defaults({ questions: [] }).write() //default variables for database
 
-router.get("/", (req, res) => {
+router.get("/all", (req, res) => {
     db.read()
     res.status(200).send({
         success: "true",
         message: "OK",
         content: db.value()
+    })
+})
+
+//Return 10 random questions
+router.get("/", (req, res) => {
+    db.read()
+    var questions = db.get("questions").value();
+
+    // Check are 10 questions in DB
+    if(questions.length < 10){
+        return res.status(500).send({
+            success: "false",
+            message: "There are less than 10 questions in the database!"
+        })
+    }
+
+    var randomQuestions = []
+    var randomNumbers = []
+
+    for(var i = 1; i<=10; i++){
+        var randomNumber
+
+        // Generate random number that not exists in array to prevent questions duplicate
+        while(true){
+            randomNumber = Math.floor(Math.random() * questions.length)
+            if(!randomNumbers.includes(randomNumber)) break
+        }
+
+        randomNumbers.push(randomNumber)
+
+        var id = questions[randomNumber].id
+        var question = questions[randomNumber].question
+        var img = questions[randomNumber].img
+        var answer1 = questions[randomNumber].answer1
+        var answer2 = questions[randomNumber].answer2
+        var answer3 = questions[randomNumber].answer3
+        var answer4 = questions[randomNumber].answer4
+        var goodAnswer = questions[randomNumber].goodAnswer
+
+        randomQuestions.push({id: id, question: question, img: img, answer1: answer1, answer2: answer2, answer3: answer3, answer4: answer4, goodAnswer: goodAnswer})
+    }    
+    
+    return res.status(200).send({
+        success: "true",
+        message: "Random questions received",
+        content: randomQuestions
     })
 })
 

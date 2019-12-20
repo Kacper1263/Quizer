@@ -31,9 +31,9 @@ class _LoadingState extends State<Loading> {
       //Test server connection
       loadingText = "Connecting\nto\nserver";
       Response response = await get(url+"/api/v1/status").timeout(Duration(seconds: 60));
-      Map responseData = jsonDecode(response.body);
-      if(responseData['success'] == "true"){
-        List<Question> _questions = await Question.downloadQuestions();
+      Map responseJson = jsonDecode(response.body);
+      if(responseJson['success'] == "true"){
+        List<Question> _questions = await Question.downloadQuestions(url);
         Navigator.pushReplacementNamed(context, "/game", arguments: {"questions": _questions});
       }   
     }catch(e){
