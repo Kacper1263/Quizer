@@ -40,6 +40,38 @@ router.get("/", (req, res) => {
     })
 })
 
+router.post("/", (req,res) => {
+    db.read()
+    
+    //To prevent ID duplication after removing a few old ones, each new ID will be 1 greater than the ID of the last object on the list.
+    var list = db.get("questions").value();
+    var lastObject = list[list.length - 1];
+    var newID;
+    if(lastObject == undefined){
+        newID = 1;
+    }
+    else{
+        newID = lastObject.id + 1;
+    }
+    const question = {
+        id: newID,
+        question: req.body.question,
+        img: req.body.img,
+        answer1: req.body.answer1,
+        answer2: req.body.answer2,
+        answer3: req.body.answer3,
+        answer4: req.body.answer4,
+        goodAnswer: req.body.goodAnswer
+    }
+
+    db.get("questions").push(question).write();
+    return res.status(201).send({
+        success: 'true',
+        message: 'Question added successfully',
+        content: question
+    })
+})
+
 function randomFromZeroToNine(){
     return Math.floor(Math.random() * 10).toString();
 }
