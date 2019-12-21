@@ -14,8 +14,6 @@ class Game extends StatefulWidget {
 class _GameState extends State<Game> {
   Map data = {};
 
-
-
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments; // received arguments from loading route
@@ -81,16 +79,19 @@ class _GameState extends State<Game> {
 bool checkIsAnswerGoodAndAddScore(playerAnswer, goodAnswer){
   if(playerAnswer == goodAnswer) {
     score++;
+    Fluttertoast.showToast(msg: "Correct!", toastLength: Toast.LENGTH_SHORT, backgroundColor: Colors.lightGreen, textColor: Colors.white, gravity: ToastGravity.CENTER, fontSize: 50);
     return true;
   }
-  else return false;
+  else {
+    Fluttertoast.showToast(msg: "Wrong!", toastLength: Toast.LENGTH_SHORT, backgroundColor: Colors.red, textColor: Colors.white, gravity: ToastGravity.CENTER, fontSize: 50);
+    return false;
+  }
 }
 void loadNext(questionNow, context){
   if(questionNow < 9) {// 10 - 1
     questionNow++;
     Navigator.pushReplacementNamed(context, "/game", arguments: {"questions": questions, "score": score, "questionNow": questionNow});
   }else{
-    Fluttertoast.showToast(msg: "Your score: " + score.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.green, textColor: Colors.white);
-    Navigator.pop(context);
+    Navigator.pushReplacementNamed(context, "/summary", arguments: {"questions": questions, "score": score, "questionNow": questionNow});
   }
 }
