@@ -41,7 +41,7 @@ class _GameState extends State<Game> {
           children: <Widget>[
             Text(questions[questionNow].question, style: TextStyle(color: Colors.white, fontSize: 30)),
             SizedBox(height: 20),
-            Image.network("https://freepngimg.com/thumb/technology/52279-1-ram-png-image-high-quality.png"),
+            Image.network("https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"),
             //Container(color: Colors.white, width: double.infinity, height: 200,), // TODO: Img here
             SizedBox(height: 30),
             OutlineButton(
@@ -130,7 +130,6 @@ class _GameState extends State<Game> {
       Future.delayed(Duration(seconds: 3),(){
         if(questionNow < 9) {
           questionNow++;
-          print(score);
           Navigator.pushReplacementNamed(context, "/game", arguments: {"questions": questions, "score": score, "questionNow": questionNow});
         }else{
           Navigator.pushReplacementNamed(context, "/summary", arguments: {"questions": questions, "score": score, "questionNow": questionNow});
