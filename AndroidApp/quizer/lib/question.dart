@@ -25,7 +25,7 @@ class Question {
   static Future<Map> downloadQuestions(url) async {
     List<Question> questions = new List<Question>();
     
-    Response response = await get(url + "/api/v1/questions").timeout(Duration(seconds: 60));
+    Response response = await get(url + "/api/v1/questions").timeout(Duration(seconds: 180));
     Map responseJson = jsonDecode(response.body);
 
     // Check is success
