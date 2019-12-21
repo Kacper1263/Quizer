@@ -60,6 +60,9 @@ class _LoadingState extends State<Loading> {
       else if(e.toString().startsWith("SocketException")){
         Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
       }
+      else if(e.toString().startsWith("type 'int' is not")){
+        Fluttertoast.showToast(msg: "Can't connect to server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+      }
       else{
         Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
       }
