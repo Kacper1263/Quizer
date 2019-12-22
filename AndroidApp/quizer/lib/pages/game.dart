@@ -129,8 +129,17 @@ class _GameState extends State<Game> {
     if(!clicked){
       Future.delayed(Duration(seconds: 3),(){
         if(questionNow < 9) {
-          questionNow++;
-          Navigator.pushReplacementNamed(context, "/game", arguments: {"questions": questions, "score": score, "questionNow": questionNow});
+          setState(() {
+            questionNow++;
+            data['questionNow'] = questionNow;
+
+            // Default settings
+            btn1Clr = Colors.grey[400];
+            btn2Clr = Colors.grey[400];
+            btn3Clr = Colors.grey[400];
+            btn4Clr = Colors.grey[400];
+            clicked = false;
+          });
         }else{
           Navigator.pushReplacementNamed(context, "/summary", arguments: {"questions": questions, "score": score, "questionNow": questionNow});
         }  
