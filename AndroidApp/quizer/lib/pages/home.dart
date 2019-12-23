@@ -52,20 +52,25 @@ class _HomeState extends State<Home> {
             OutlineButton(
               child: Text("Admin panel", style: TextStyle(color: Colors.white)),
               onPressed: () {
-                dialog(adminPassController, titleText: "Admin password", descriptionText: "Provide admin password to login", hintText: "E.g. 1423",
-                  onCancel: (){
-                    Fluttertoast.showToast(msg: "Canceled", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey[700], textColor: Colors.white);
-                    Navigator.pop(context);  
-                  },
-                  onSend: () {                    
-                    if(adminPassController.text == "") {
-                      Fluttertoast.showToast(msg: "You need to provide password!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-                      return;
+                if(ipController.text != "" && ipController.text != null){
+                  dialog(adminPassController, titleText: "Admin password", descriptionText: "Provide admin password to login", hintText: "E.g. 1423",
+                    onCancel: (){
+                      Fluttertoast.showToast(msg: "Canceled", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey[700], textColor: Colors.white);
+                      Navigator.pop(context);  
+                    },
+                    onSend: () {                    
+                      if(adminPassController.text == "") {
+                        Fluttertoast.showToast(msg: "You need to provide password!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                        return;
+                      }
+                      Fluttertoast.showToast(msg: "TODO: Admin panel route/layout and API admin panel", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey[700], textColor: Colors.white);
+                      Navigator.pop(context);  
                     }
-                    Fluttertoast.showToast(msg: "TODO: Admin panel route/layout and API admin panel", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey[700], textColor: Colors.white);
-                    Navigator.pop(context);  
-                  }
-                );
+                  );                  
+                }     
+                else{
+                  Fluttertoast.showToast(msg: "You must provide URL of server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                }   
               },
               borderSide: BorderSide(color: Colors.grey[400]),
             )
