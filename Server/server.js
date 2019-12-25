@@ -144,6 +144,7 @@ var routes_v1 = require('./routes/v1/index')
 app.use("/api/v1/status", routes_v1.status)
 app.use("/api/v1/apk", routes_v1.apk)
 app.use("/api/v1/questions", routes_v1.questions)
+app.use("/api/v1/admin", routes_v1.admin)
 
 //404
 app.use(function (req, res) {
