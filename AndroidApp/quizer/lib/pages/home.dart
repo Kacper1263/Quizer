@@ -63,8 +63,12 @@ class _HomeState extends State<Home> {
                         Fluttertoast.showToast(msg: "You need to provide password!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
                         return;
                       }
-                      Fluttertoast.showToast(msg: "TODO: Admin panel route/layout and API admin panel", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey[700], textColor: Colors.white);
                       Navigator.pop(context);  
+                      Navigator.pushNamed(context, '/loading', arguments: {
+                        "url": ipController.text,
+                        "password": adminPassController.text,
+                        "whatToDo": "login"
+                      });
                     }
                   );                  
                 }     

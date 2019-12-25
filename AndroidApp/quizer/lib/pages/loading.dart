@@ -50,6 +50,73 @@ class _LoadingState extends State<Loading> {
           Navigator.pop(context);
         }        
       }   
+      else{
+        Fluttertoast.showToast(msg: "Bad response from server! Response: $responseJson", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+        Navigator.pop(context);
+      }
+    }catch(e){
+      if(e.toString().startsWith("TimeoutException after")){
+        Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+      }
+      else if(e.toString().startsWith("FormatException")){
+        Fluttertoast.showToast(msg: "Connected to IP but can't connect to Quizer server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+      }
+      else if(e.toString().startsWith("SocketException")){
+        Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+      }
+      else if(e.toString().startsWith("type 'int' is not")){
+        Fluttertoast.showToast(msg: "Can't connect to server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+      }
+      else{
+        Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+      }
+      Navigator.pop(context);
+    }     
+  }
+
+  void loginToPanel() async{
+    if(isLoading) return;
+    else isLoading = true;
+
+    try{
+      //Add http:// if needed
+      var url = data["url"].toString();
+      var http = url.substring(0,7).toLowerCase();
+      var https = url.substring(0,8).toLowerCase();
+      if(http != "http://" && https != "https://") url = "http://$url";
+
+      //Test server connection
+      setState(() {
+        loadingText = "Connecting\nto\nserver";
+      });      
+      Response response = await get(url+"/api/v1/status").timeout(Duration(seconds: 60));
+      Map responseJson = jsonDecode(response.body);
+      if(responseJson['success'] == "true"){
+
+        setState(() {
+          loadingText = "Logging in";
+        });     
+
+        Response response = await post(url+"/api/v1/admin", body: {
+          "password": data['password']
+        }).timeout(Duration(seconds: 60));
+        Map responseJson = jsonDecode(response.body);
+        if(responseJson['success'] == "true"){
+          Navigator.pushReplacementNamed(context, '/adminPanel');
+        }  
+        else if(responseJson['success'] == "false"){
+          Fluttertoast.showToast(msg: "Error: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+          Navigator.pop(context);
+        } 
+        else{
+          Fluttertoast.showToast(msg: "Bad response from server! Response: $responseJson", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+          Navigator.pop(context);
+        }            
+      }   
+      else{
+        Fluttertoast.showToast(msg: "Bad response from server! Response: $responseJson", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+        Navigator.pop(context);
+      }
     }catch(e){
       if(e.toString().startsWith("TimeoutException after")){
         Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
@@ -74,7 +141,8 @@ class _LoadingState extends State<Loading> {
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments; // received arguments from home route
 
-    getQuestions();
+    if(data['whatToDo'] == "login") loginToPanel();
+    else getQuestions();
 
     return WillPopScope(
       onWillPop: () async => false,

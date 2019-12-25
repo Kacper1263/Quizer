@@ -42,7 +42,6 @@ class _GameState extends State<Game> {
             Text(questions[questionNow].question, style: TextStyle(color: Colors.white, fontSize: 30)),
             SizedBox(height: 20),
             Image.network("https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"),
-            //Container(color: Colors.white, width: double.infinity, height: 200,), // TODO: Img here
             SizedBox(height: 30),
             OutlineButton(
               child: Text(questions[questionNow].answer1, style: TextStyle(color: Colors.white)),
