@@ -55,21 +55,7 @@ class _LoadingState extends State<Loading> {
         Navigator.pop(context);
       }
     }catch(e){
-      if(e.toString().startsWith("TimeoutException after")){
-        Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
-      else if(e.toString().startsWith("FormatException")){
-        Fluttertoast.showToast(msg: "Connected to IP but can't connect to Quizer server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
-      else if(e.toString().startsWith("SocketException")){
-        Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
-      else if(e.toString().startsWith("type 'int' is not")){
-        Fluttertoast.showToast(msg: "Can't connect to server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
-      else{
-        Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
+      whatError(e);
       Navigator.pop(context);
     }     
   }
@@ -118,21 +104,7 @@ class _LoadingState extends State<Loading> {
         Navigator.pop(context);
       }
     }catch(e){
-      if(e.toString().startsWith("TimeoutException after")){
-        Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
-      else if(e.toString().startsWith("FormatException")){
-        Fluttertoast.showToast(msg: "Connected to IP but can't connect to Quizer server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
-      else if(e.toString().startsWith("SocketException")){
-        Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
-      else if(e.toString().startsWith("type 'int' is not")){
-        Fluttertoast.showToast(msg: "Can't connect to server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
-      else{
-        Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-      }
+      whatError(e);
       Navigator.pop(context);
     }     
   }
@@ -172,5 +144,23 @@ class _LoadingState extends State<Loading> {
             ),
           )),
     );
+  }
+
+  void whatError(e){
+    if(e.toString().startsWith("TimeoutException after")){
+      Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("FormatException")){
+      Fluttertoast.showToast(msg: "Connected to IP but can't connect to Quizer server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("SocketException")){
+      Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("type 'int' is not")){
+      Fluttertoast.showToast(msg: "Can't connect to server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else{
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
   }
 }
