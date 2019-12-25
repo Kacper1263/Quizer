@@ -88,7 +88,12 @@ router.get("/", (req, res) => {
 
 router.post("/", (req,res) => {
     db.read()
-    
+    if(adminPassword != req.body.password){
+        return res.send({
+            success: 'false',
+            message: 'Bad password'
+        })
+    }
     //To prevent ID duplication after removing a few old ones, each new ID will be 1 greater than the ID of the last object on the list.
     var list = db.get("questions").value();
     var lastObject = list[list.length - 1];
@@ -110,6 +115,31 @@ router.post("/", (req,res) => {
         goodAnswer: req.body.goodAnswer
     }
 
+    if(question.img != "null"){
+        console.log(question.img)
+        var realImg = Buffer.from(question.img, "base64")
+        
+        fs.writeFile("img/" + req.body.filename, realImg, function(err){
+            if(err){
+                console.log(err)
+                return res.send({
+                    success: "false",
+                    message: err
+                })
+            }
+            else{
+                question.img = "img/" + req.body.filename
+                return res.send({
+                    success: "true",
+                    message: "Question added successfully",
+                    content: question
+                })
+            }
+        })
+        db.get("questions").push(question).write();
+        return
+    }
+    
     db.get("questions").push(question).write();
     return res.status(201).send({
         success: 'true',

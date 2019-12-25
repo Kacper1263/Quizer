@@ -60,14 +60,14 @@ class _AdminPanelState extends State<AdminPanel> {
                               ) {
                                 Fluttertoast.showToast(msg: "You must fill all fields! \nImage is not required.", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
                               }else{
-                                String base64Image = null;
-                                String fileName = null;
+                                String base64Image = "null";
+                                String fileName = "null";
                                 if(image != null){
                                   base64Image = base64Encode(image.readAsBytesSync());
                                   fileName = image.path.split("/").last;
                                 }
                                 Fluttertoast.showToast(msg: "Sending, please wait...", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey, textColor: Colors.white);
-                                Response response = await post(data['url'] + "/api/v1/admin/question/add", body: {
+                                Response response = await post(data['url'] + "/api/v1/questions", body: {
                                   "question": questionTextCtrl.text,
                                   "img": base64Image,
                                   "filename": fileName,
