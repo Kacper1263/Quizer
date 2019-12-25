@@ -88,7 +88,7 @@ class _LoadingState extends State<Loading> {
         }).timeout(Duration(seconds: 60));
         Map responseJson = jsonDecode(response.body);
         if(responseJson['success'] == "true"){
-          Navigator.pushReplacementNamed(context, '/adminPanel');
+          Navigator.pushReplacementNamed(context, '/adminPanel', arguments: {"url": url, "password": data['password']});
         }  
         else if(responseJson['success'] == "false"){
           Fluttertoast.showToast(msg: "Error: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
