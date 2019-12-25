@@ -60,6 +60,15 @@ class _AdminPanelState extends State<AdminPanel> {
                               ) {
                                 Fluttertoast.showToast(msg: "You must fill all fields! \nImage is not required.", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
                               }else{
+                                if(
+                                  goodAnswerTextCtrl.text != "1" &&
+                                  goodAnswerTextCtrl.text != "2" &&
+                                  goodAnswerTextCtrl.text != "3" &&
+                                  goodAnswerTextCtrl.text != "4" 
+                                ){
+                                  return Fluttertoast.showToast(msg: "Good answer must be from 1 to 4", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                                }
+                                image = await ImagePicker.pickImage(source: ImageSource.gallery);
                                 String base64Image = "null";
                                 String fileName = "null";
                                 if(image != null){
@@ -67,24 +76,29 @@ class _AdminPanelState extends State<AdminPanel> {
                                   fileName = image.path.split("/").last;
                                 }
                                 Fluttertoast.showToast(msg: "Sending, please wait...", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey, textColor: Colors.white);
-                                Response response = await post(data['url'] + "/api/v1/questions", body: {
-                                  "question": questionTextCtrl.text,
-                                  "img": base64Image,
-                                  "filename": fileName,
-                                  "answer1": answer1TextCtrl.text,
-                                  "answer2": answer2TextCtrl.text,
-                                  "answer3": answer3TextCtrl.text,
-                                  "answer4": answer4TextCtrl.text,
-                                  "goodAnswer": goodAnswerTextCtrl.text,
-                                  "password": data['password']
-                                }).timeout(Duration(seconds: 60));
-                                Map responseJson = jsonDecode(response.body);
-                                if(responseJson['success'] == "true"){
-                                  Fluttertoast.showToast(msg: "Success!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.green, textColor: Colors.white);
-                                  Navigator.pop(context);
-                                }
-                                else{
-                                  Fluttertoast.showToast(msg: "Error message: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.green, textColor: Colors.white);
+                                try{
+                                  Response response = await post(data['url'] + "/api/v1/questions", body: {
+                                    "question": questionTextCtrl.text,
+                                    "img": base64Image,
+                                    "filename": fileName,
+                                    "answer1": answer1TextCtrl.text,
+                                    "answer2": answer2TextCtrl.text,
+                                    "answer3": answer3TextCtrl.text,
+                                    "answer4": answer4TextCtrl.text,
+                                    "goodAnswer": goodAnswerTextCtrl.text,
+                                    "password": data['password']
+                                  }).timeout(Duration(seconds: 300));
+                                  print(response.body);
+                                  Map responseJson = jsonDecode(response.body);
+                                  if(responseJson['success'] == "true"){
+                                    Fluttertoast.showToast(msg: "Success!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.green, textColor: Colors.white);
+                                    Navigator.pop(context);
+                                  }
+                                  else{
+                                    Fluttertoast.showToast(msg: "Error message: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                                  }                                  
+                                }catch(e){
+                                  whatError(e);
                                 }
                               }
                             }
@@ -150,6 +164,7 @@ class _AdminPanelState extends State<AdminPanel> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        print(image);
         return AlertDialog(
           backgroundColor: Colors.grey[800],
           title: Text("Add new question", style: TextStyle(color: Colors.white)),
@@ -174,26 +189,26 @@ class _AdminPanelState extends State<AdminPanel> {
                   ),
                 ),
                 SizedBox(height: 10),
-                FlatButton.icon(icon: Icon(Icons.image, color: Colors.white, size: 35,), label: Text("Upload image", style: TextStyle(color: Colors.white),), 
-                  onPressed: ()async{
-                    image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                  }, 
-                  color: Colors.grey[900], shape: 
-                  RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(10.0),
-                    side: BorderSide(color: Colors.white)
-                  )
-                ),
-                FlatButton.icon(icon: Icon(Icons.delete_forever, color: Colors.white, size: 35,), label: Text("Delete image", style: TextStyle(color: Colors.white),), 
-                  onPressed: (){
-                    image = null;
-                  }, 
-                  color: Colors.grey[900], shape: 
-                  RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(10.0),
-                    side: BorderSide(color: Colors.white)
-                  )
-                ),
+                // FlatButton.icon(icon: Icon(Icons.image, color: Colors.white, size: 35,), label: Text("Upload image", style: TextStyle(color: Colors.white),), 
+                //   onPressed: (){
+                //     ImagePicker.pickImage(source: ImageSource.gallery).then((i){image = i;});
+                //   }, 
+                //   color: Colors.grey[900], shape: 
+                //   RoundedRectangleBorder(
+                //     borderRadius: new BorderRadius.circular(10.0),
+                //     side: BorderSide(color: Colors.white)
+                //   )
+                // ),
+                // FlatButton.icon(icon: Icon(Icons.delete_forever, color: Colors.white, size: 35,), label: Text("Delete image", style: TextStyle(color: Colors.white),), 
+                //   onPressed: (){
+                //     image = null;
+                //   }, 
+                //   color: Colors.grey[900], shape: 
+                //   RoundedRectangleBorder(
+                //     borderRadius: new BorderRadius.circular(10.0),
+                //     side: BorderSide(color: Colors.white)
+                //   )
+                // ),
                 SizedBox(height: 10),
                 Text("Answers: ", style: TextStyle(color: Colors.white)),
                 SizedBox(height: 10),
@@ -268,7 +283,7 @@ class _AdminPanelState extends State<AdminPanel> {
                   maxLength: 1,
                   keyboardType: TextInputType.number,
                   style: TextStyle(color: Colors.white),
-                  controller: answer1TextCtrl,
+                  controller: goodAnswerTextCtrl,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),
@@ -301,4 +316,23 @@ class _AdminPanelState extends State<AdminPanel> {
       }
     );
   } //? End of dialogNewQuestion()
+
+  void whatError(e){
+    if(e.toString().startsWith("TimeoutException after")){
+      Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("FormatException")){
+      print(e);
+      //Fluttertoast.showToast(msg: "Connected to IP but can't connect to Quizer server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("SocketException")){
+      Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("type 'int' is not")){
+      Fluttertoast.showToast(msg: "Can't connect to server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else{
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+  }
 }

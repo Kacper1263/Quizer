@@ -116,7 +116,6 @@ router.post("/", (req,res) => {
     }
 
     if(question.img != "null"){
-        console.log(question.img)
         var realImg = Buffer.from(question.img, "base64")
         
         fs.writeFile("img/" + req.body.filename, realImg, function(err){
@@ -129,6 +128,7 @@ router.post("/", (req,res) => {
             }
             else{
                 question.img = "img/" + req.body.filename
+                db.get("questions").push(question).write();
                 return res.send({
                     success: "true",
                     message: "Question added successfully",
@@ -136,7 +136,6 @@ router.post("/", (req,res) => {
                 })
             }
         })
-        db.get("questions").push(question).write();
         return
     }
     
