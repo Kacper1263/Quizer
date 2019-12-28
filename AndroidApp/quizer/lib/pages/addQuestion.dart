@@ -174,7 +174,7 @@ class _AddQuestionState extends State<AddQuestion> {
                   //? Good answer
                   maxLines: null,
                   maxLength: 1,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(decimal: false, signed: false),
                   style: TextStyle(color: Colors.white),
                   controller: goodAnswerTextCtrl,
                   decoration: InputDecoration(
@@ -185,7 +185,7 @@ class _AddQuestionState extends State<AddQuestion> {
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),
                     hintText: "E.g.: 2",
-                    errorText: goodAnswerTextCtrl.text.isNotEmpty ? null : errorTextGoodAnswer,
+                    errorText:  goodAnswerTextCtrl.text.isNotEmpty && !goodAnswerTextCtrl.text.startsWith('-') && !goodAnswerTextCtrl.text.startsWith('+') && !goodAnswerTextCtrl.text.startsWith('.') && !goodAnswerTextCtrl.text.startsWith(',') && !goodAnswerTextCtrl.text.startsWith(' ') ? (int.parse(goodAnswerTextCtrl.text) >=  1 && int.parse(goodAnswerTextCtrl.text) <=  4 ? null : errorTextGoodAnswer) : errorTextGoodAnswer,
                     hintStyle: TextStyle(color: Colors.grey[500]),
                   ),
                 ),

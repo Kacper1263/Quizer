@@ -117,8 +117,8 @@ router.post("/", (req,res) => {
 
     if(question.img != "null"){
         var realImg = Buffer.from(question.img, "base64")
-        
-        fs.writeFile("img/" + req.body.filename, realImg, function(err){
+        req.body.filename = `${Date.now()}__${req.body.filename}`
+        fs.writeFile(`img/${req.body.filename}`, realImg, function(err){
             if(err){
                 console.log(err)
                 return res.send({
