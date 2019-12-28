@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:quizer/pages/summary.dart';
 import 'package:quizer/question.dart';
 
 class Game extends StatefulWidget {
@@ -8,7 +9,7 @@ class Game extends StatefulWidget {
 }
   
 
-class _GameState extends State<Game> {
+class _GameState extends State<Game> with WidgetsBindingObserver {
   Map data = {};
 
   bool clicked = false;
@@ -21,6 +22,42 @@ class _GameState extends State<Game> {
   var btn2Clr = Colors.grey[400];
   var btn3Clr = Colors.grey[400];
   var btn4Clr = Colors.grey[400];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  //! Check for app go to background to abort quiz
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if(state == AppLifecycleState.resumed){
+      Navigator.pushReplacementNamed(context, "/summary", arguments: {"questions": questions, "score": score, "questionNow": questionNow});
+      showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return AlertDialog(
+            title: Center(child: Text("Quiz aborted!")),
+            content: SingleChildScrollView(child: Text("The application has been minimized, covered by another application, or you have locked the screen. To prevent cheating, Quiz was aborted. \n\nPoints have been counted until this event was detected.", textAlign: TextAlign.justify,),),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          );
+        }
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +78,7 @@ class _GameState extends State<Game> {
           children: <Widget>[
             Text(questions[questionNow].question, style: TextStyle(color: Colors.white, fontSize: 30)),
             SizedBox(height: 20),
-            Image.network("https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"),
+            questions[questionNow].img == "null" ? Container() : Image.network("https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"),
             SizedBox(height: 30),
             OutlineButton(
               child: Text(questions[questionNow].answer1, style: TextStyle(color: Colors.white)),

@@ -12,7 +12,7 @@ class AddQuestion extends StatefulWidget {
   _AddQuestionState createState() => _AddQuestionState();
 }
 
-class _AddQuestionState extends State<AddQuestion> {
+class _AddQuestionState extends State<AddQuestion>{
   Map data = {};
 
   TextEditingController questionTextCtrl = new TextEditingController();
@@ -185,7 +185,7 @@ class _AddQuestionState extends State<AddQuestion> {
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),
                     hintText: "E.g.: 2",
-                    errorText:  goodAnswerTextCtrl.text.isNotEmpty && !goodAnswerTextCtrl.text.startsWith('-') && !goodAnswerTextCtrl.text.startsWith('+') && !goodAnswerTextCtrl.text.startsWith('.') && !goodAnswerTextCtrl.text.startsWith(',') && !goodAnswerTextCtrl.text.startsWith(' ') ? (int.parse(goodAnswerTextCtrl.text) >=  1 && int.parse(goodAnswerTextCtrl.text) <=  4 ? null : errorTextGoodAnswer) : errorTextGoodAnswer,
+                    errorText: goodAnswerTextCtrl.text.isNotEmpty && !goodAnswerTextCtrl.text.startsWith('-') && !goodAnswerTextCtrl.text.startsWith('+') && !goodAnswerTextCtrl.text.startsWith('.') && !goodAnswerTextCtrl.text.startsWith(',') && !goodAnswerTextCtrl.text.startsWith(' ') ? (int.parse(goodAnswerTextCtrl.text) >=  1 && int.parse(goodAnswerTextCtrl.text) <=  4 ? null : errorTextGoodAnswer) : errorTextGoodAnswer,
                     hintStyle: TextStyle(color: Colors.grey[500]),
                   ),
                 ),
