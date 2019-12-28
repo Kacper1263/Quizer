@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizer/pages/addQuestion.dart';
 import 'package:quizer/pages/adminPanel.dart';
 import 'package:quizer/pages/game.dart';
 import 'package:quizer/pages/home.dart';
@@ -14,6 +15,7 @@ void main() => runApp(MaterialApp(
         '/game': (context) => Game(),
         '/summary': (context) => Summary(),
         '/adminPanel': (context) => AdminPanel(),
+        '/addQuestion': (context) => AddQuestion(),
       },
       theme: ThemeData(
         primaryColor: Colors.grey[850],
