@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
                 enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[200])),
                 focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[600])),
                 border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[200])),
-                hintText: 'Enter IP or URL of server',
+                hintText: 'Enter IP or URL:Port of server',
                 hintStyle: TextStyle(color: Colors.grey[500]),
               ),
             ),

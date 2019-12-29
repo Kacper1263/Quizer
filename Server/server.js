@@ -142,9 +142,10 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 //Routes API v1
 var routes_v1 = require('./routes/v1/index')
 app.use("/api/v1/status", routes_v1.status)
-app.use("/api/v1/apk", routes_v1.apk)
+app.use("/api/v1/apk", routes_v1.apk)               // TODO: Do it like /img
 app.use("/api/v1/questions", routes_v1.questions)
 app.use("/api/v1/admin", routes_v1.admin)
+app.use("/api/v1/img", express.static('img'))
 
 //404
 app.use(function (req, res) {

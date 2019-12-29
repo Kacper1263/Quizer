@@ -83,6 +83,8 @@ class _AddQuestionState extends State<AddQuestion>{
                   maxLines: null,
                   style: TextStyle(color: Colors.white),
                   controller: questionTextCtrl,
+                  keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[200])),
                     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[600])),
@@ -100,6 +102,7 @@ class _AddQuestionState extends State<AddQuestion>{
                   maxLines: null,
                   style: TextStyle(color: Colors.white),
                   controller: answer1TextCtrl,
+                  textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),
@@ -118,6 +121,7 @@ class _AddQuestionState extends State<AddQuestion>{
                   maxLines: null,
                   style: TextStyle(color: Colors.white),
                   controller: answer2TextCtrl,
+                  textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),
@@ -136,6 +140,7 @@ class _AddQuestionState extends State<AddQuestion>{
                   maxLines: null,
                   style: TextStyle(color: Colors.white),
                   controller: answer3TextCtrl,
+                  textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),
@@ -154,6 +159,7 @@ class _AddQuestionState extends State<AddQuestion>{
                   maxLines: null,
                   style: TextStyle(color: Colors.white),
                   controller: answer4TextCtrl,
+                  textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),

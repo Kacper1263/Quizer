@@ -49,7 +49,7 @@ router.get("/", (req, res) => {
     if(questions.length < 10){
         return res.status(500).send({
             success: "false",
-            message: "There are less than 10 questions in the database!"
+            message: `There are less than 10 questions in the database! \nAdd (${10-questions.length}) more!`
         })
     }
 
@@ -117,6 +117,10 @@ router.post("/", (req,res) => {
 
     if(question.img != "null"){
         var realImg = Buffer.from(question.img, "base64")
+
+        //Delete spaces from filename
+        req.body.filename = req.body.filename.replace(/\s+/g, '_')
+
         req.body.filename = `${Date.now()}__${req.body.filename}`
         fs.writeFile(`img/${req.body.filename}`, realImg, function(err){
             if(err){

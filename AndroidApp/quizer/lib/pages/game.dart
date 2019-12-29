@@ -78,7 +78,19 @@ class _GameState extends State<Game> with WidgetsBindingObserver {
           children: <Widget>[
             Text(questions[questionNow].question, style: TextStyle(color: Colors.white, fontSize: 30)),
             SizedBox(height: 20),
-            questions[questionNow].img == "null" ? Container() : Image.network("https://images.pexels.com/photos/853199/pexels-photo-853199.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"),
+            questions[questionNow].img == "null" ? Container() : Image.network("${data['url']}/api/v1/${questions[questionNow].img}",
+            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+              if (loadingProgress == null)
+                return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                      : null,
+                ),
+              );
+            },
+            ),
             SizedBox(height: 30),
             OutlineButton(
               child: Text(questions[questionNow].answer1, style: TextStyle(color: Colors.white)),
