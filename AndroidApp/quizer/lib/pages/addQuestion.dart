@@ -63,7 +63,7 @@ class _AddQuestionState extends State<AddQuestion>{
                     side: BorderSide(color: Colors.white)
                   )
                 ),
-                image != null ? Image.file(image) : Container(), //! If there is not image show empty container
+                image == null ? Container() : Image.file(image), //! If there is not image show empty container
                 FlatButton.icon(icon: Icon(Icons.delete_forever, color: Colors.white, size: 35,), label: Text("Delete image", style: TextStyle(color: Colors.white),),
                   onPressed: (){
                     setState(() {

@@ -10,6 +10,7 @@ class Game extends StatefulWidget {
   
 
 class _GameState extends State<Game> with WidgetsBindingObserver {
+  ScrollController scrollController = new ScrollController();
   Map data = {};
 
   bool clicked = false;
@@ -67,6 +68,7 @@ class _GameState extends State<Game> with WidgetsBindingObserver {
     questionNow = data["questionNow"];
 
     var _goodAnswer = questions[questionNow].goodAnswer;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Quizer"),
@@ -74,6 +76,7 @@ class _GameState extends State<Game> with WidgetsBindingObserver {
       body: Container(
         color: Colors.grey[900],
         child: ListView(
+          controller: scrollController,
           padding: const EdgeInsets.all(8),
           children: <Widget>[
             Text(questions[questionNow].question, style: TextStyle(color: Colors.white, fontSize: 30)),
@@ -186,6 +189,7 @@ class _GameState extends State<Game> with WidgetsBindingObserver {
             btn2Clr = Colors.grey[400];
             btn3Clr = Colors.grey[400];
             btn4Clr = Colors.grey[400];
+            scrollController.animateTo(0, curve: Curves.linear, duration: Duration(milliseconds: 1) ); //? Animate to top
             clicked = false;
           });
         }else{
