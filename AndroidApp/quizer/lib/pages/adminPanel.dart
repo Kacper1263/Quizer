@@ -69,7 +69,7 @@ class _AdminPanelState extends State<AdminPanel> {
                       height: 100,
                       width: 130,
                       child: OutlineButton(
-                        child: Text("Delete question", style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.center,),
+                        child: Text("Status", style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.center,),
                         borderSide: BorderSide(color: Colors.grey[400]),
                         onPressed: () {},
                       ),
