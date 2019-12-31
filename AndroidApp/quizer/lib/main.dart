@@ -4,6 +4,7 @@ import 'package:quizer/pages/adminPanel.dart';
 import 'package:quizer/pages/game.dart';
 import 'package:quizer/pages/home.dart';
 import 'package:quizer/pages/loading.dart';
+import 'package:quizer/pages/status.dart';
 import 'package:quizer/pages/summary.dart';
 
 void main() => runApp(MaterialApp(
@@ -16,6 +17,7 @@ void main() => runApp(MaterialApp(
         '/summary': (context) => Summary(),
         '/adminPanel': (context) => AdminPanel(),
         '/addQuestion': (context) => AddQuestion(),
+        '/status': (context) => Status()
       },
       theme: ThemeData(
         primaryColor: Colors.grey[850],

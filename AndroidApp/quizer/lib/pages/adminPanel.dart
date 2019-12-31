@@ -71,16 +71,27 @@ class _AdminPanelState extends State<AdminPanel> {
                       child: OutlineButton(
                         child: Text("Status", style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.center,),
                         borderSide: BorderSide(color: Colors.grey[400]),
-                        onPressed: () {},
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100,
-                      width: 130,
-                      child: OutlineButton(
-                        child: Text("Edit question", style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.center,),
-                        borderSide: BorderSide(color: Colors.grey[400]),
-                        onPressed: () {},
+                        onPressed: () async {
+                          var ping = DateTime.now().millisecond;
+
+                          Response response = await get(data['url']+"/api/v1/status").timeout(Duration(seconds: 60));
+                          Map responseJson = jsonDecode(response.body);
+                          if(responseJson['success'] == "true"){
+                            ping = DateTime.now().millisecond - ping;
+                            Navigator.pushNamed(context, '/status', arguments: {
+                              "ping": ping.toString() + "ms",
+                              "amountOfQuestions": responseJson['amountOfQuestions'],
+                              "amountOfImages": responseJson['amountOfImages'],
+                              "imagesSize": responseJson['imagesSize']
+                            });
+                          }
+                          else if(responseJson['success'] == "false"){
+                            Fluttertoast.showToast(msg: "Error: ${responseJson["message"]}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                          }
+                          else{
+                            Fluttertoast.showToast(msg: "Error: Bad or no response from server", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                          }
+                        },
                       ),
                     ),
                   ],

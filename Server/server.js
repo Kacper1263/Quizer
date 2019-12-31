@@ -7,6 +7,7 @@ try {
     require('lowdb')
     require('readline-sync')
     require('localtunnel')
+    require('get-folder-size')
 } catch (e) {
     return console.log(`\n   You don't have required packages! \n\n   Use "npm i" to install them! \n\n`)
 }

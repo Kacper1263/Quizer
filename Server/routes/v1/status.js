@@ -1,5 +1,6 @@
 const express = require('express')
 const fs = require('fs')
+const folderSize = require('get-folder-size')
 const router = express.Router()
 
 //#region Config variables
@@ -33,9 +34,22 @@ db.defaults({ questions: [] }).write() //default variables for database
 
 router.get("/", (req, res) => {
     db.read()
-    res.status(200).send({
-        success: "true",
-        message: "OK"
+    folderSize("./img", (err, size) => {
+        if(err){
+            console.log(err)
+            return res.send({
+                success: "false",
+                message: "Cant get images folder size"
+            })
+        }
+
+        res.status(200).send({
+            success: "true",
+            message: "Server status",
+            amountOfQuestions: db.get("questions").value().length,
+            amountOfImages: fs.readdirSync("./img").length,
+            imagesSize: (size / 1024 / 1024).toFixed(2) + ' MB'
+        })
     })
 })
 
