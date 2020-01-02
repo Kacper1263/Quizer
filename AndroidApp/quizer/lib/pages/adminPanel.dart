@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quizer/pages/loadingScreen.dart';
 
 class AdminPanel extends StatefulWidget {
   @override
@@ -73,12 +74,14 @@ class _AdminPanelState extends State<AdminPanel> {
                         borderSide: BorderSide(color: Colors.grey[400]),
                         onPressed: () async {
                           var ping = DateTime.now().millisecond;
-
+                          
+                          Navigator.pushNamed(context, '/loadingScreen', arguments: {"text": "Checking\nstatus"});
+                          
                           Response response = await get(data['url']+"/api/v1/status").timeout(Duration(seconds: 60));
                           Map responseJson = jsonDecode(response.body);
                           if(responseJson['success'] == "true"){
                             ping = DateTime.now().millisecond - ping;
-                            Navigator.pushNamed(context, '/status', arguments: {
+                            Navigator.pushReplacementNamed(context, '/status', arguments: {
                               "ping": ping.toString() + "ms",
                               "amountOfQuestions": responseJson['amountOfQuestions'],
                               "amountOfImages": responseJson['amountOfImages'],
@@ -87,9 +90,11 @@ class _AdminPanelState extends State<AdminPanel> {
                           }
                           else if(responseJson['success'] == "false"){
                             Fluttertoast.showToast(msg: "Error: ${responseJson["message"]}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                            Navigator.pop(context);
                           }
                           else{
                             Fluttertoast.showToast(msg: "Error: Bad or no response from server", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                            Navigator.pop(context);
                           }
                         },
                       ),
