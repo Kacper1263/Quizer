@@ -56,7 +56,9 @@ class _AdminPanelState extends State<AdminPanel> {
                       child: OutlineButton(
                         child: Text("View all questions", style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.center,),
                         borderSide: BorderSide(color: Colors.grey[400]),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/loading', arguments: {"url": data['url'], "all": true});
+                        },
                       ),
                     ),
                   ],

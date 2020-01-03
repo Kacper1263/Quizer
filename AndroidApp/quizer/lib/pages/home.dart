@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             SizedBox(height: 20),
             TextField(
+              keyboardType: TextInputType.visiblePassword,
               style: TextStyle(color: Colors.white),
               controller: ipController,
               decoration: InputDecoration(
@@ -99,6 +100,7 @@ class _HomeState extends State<Home> {
                 Text(descriptionText ,style: TextStyle(color: Colors.white)),
                 SizedBox(height: 20),
                 TextField(
+                  keyboardType: TextInputType.visiblePassword,
                   style: TextStyle(
                     color: Colors.white
                   ),

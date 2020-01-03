@@ -41,14 +41,26 @@ class _LoadingState extends State<Loading> {
           loadingText = "Downloading\nquestions";
         });     
 
-        var res = await Question.downloadQuestions(url);
-        if(res["success"] == true){
-          _questions = res["questions"];
-          Navigator.pushReplacementNamed(context, "/game", arguments: {"url": url ,"questions": _questions, "score": 0, "questionNow": 0});
-        }else{
-          Fluttertoast.showToast(msg: "Error: ${res["message"]}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
-          Navigator.pop(context);
-        }        
+        if(data['all'] != true){ //? Normal situation e.g. game
+          var res = await Question.downloadQuestions(url);
+          if(res["success"] == true){
+            _questions = res["questions"];
+            Navigator.pushReplacementNamed(context, "/game", arguments: {"url": url ,"questions": _questions, "score": 0, "questionNow": 0});
+          }else{
+            Fluttertoast.showToast(msg: "Error: ${res["message"]}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+            Navigator.pop(context);
+          }    
+        }
+        else{ //? Get all questions e.g for admin panel
+          var res = await Question.downloadQuestions(url, all: true);
+          if(res["success"] == true){
+            _questions = res["questions"];
+            Navigator.pushReplacementNamed(context, '/viewAll', arguments: {"url": url ,"questions": _questions});
+          }else{
+            Fluttertoast.showToast(msg: "Error: ${res["message"]}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+            Navigator.pop(context);
+          }  
+        }
       }   
       else{
         Fluttertoast.showToast(msg: "Bad response from server! Response: $responseJson", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
