@@ -55,7 +55,7 @@ class _LoadingState extends State<Loading> {
           var res = await Question.downloadQuestions(url, all: true);
           if(res["success"] == true){
             _questions = res["questions"];
-            Navigator.pushReplacementNamed(context, '/viewAll', arguments: {"url": url ,"questions": _questions});
+            Navigator.pushReplacementNamed(context, '/viewAll', arguments: {"url": url ,"questions": _questions, "password": data['password'], "all": true});
           }else{
             Fluttertoast.showToast(msg: "Error: ${res["message"]}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
             Navigator.pop(context);

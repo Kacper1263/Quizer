@@ -22,7 +22,7 @@ class Question {
       this.answer4,
       this.goodAnswer});
 
-  static Future<Map> downloadQuestions(url, {bool all}) async {
+  static Future<Map> downloadQuestions(url, {bool all = false}) async {
     List<Question> questions = new List<Question>();
     
     Response response = await get(url + "/api/v1/questions/${all ? "all" : ""}").timeout(Duration(seconds: 180)); //? ${all ? "all" : ""} - If all == true -> add "/all" to URL. If not -> leave blank

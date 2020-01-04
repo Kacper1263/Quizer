@@ -57,7 +57,7 @@ class _AdminPanelState extends State<AdminPanel> {
                         child: Text("View all questions", style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.center,),
                         borderSide: BorderSide(color: Colors.grey[400]),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/loading', arguments: {"url": data['url'], "all": true});
+                          Navigator.pushNamed(context, '/loading', arguments: {"url": data['url'], "all": true, "password": data['password']});
                         },
                       ),
                     ),

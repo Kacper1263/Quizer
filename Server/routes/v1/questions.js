@@ -154,13 +154,13 @@ router.post("/", (req,res) => {
 router.delete('/delete/:id', (req, res) => {
     db.read();
 
-    if(adminPassword != req.body.password){
+    if(adminPassword != req.headers.password){
         return res.send({
             success: 'false',
             message: 'Bad password'
         })
     }
-    
+
     const id = parseInt(req.params.id, 10);
 
     var list = db.get("questions").value();
