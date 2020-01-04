@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:quizer/dialogs.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
               child: Text("Admin panel", style: TextStyle(color: Colors.white)),
               onPressed: () {
                 if(ipController.text != "" && ipController.text != null){
-                  dialog(adminPassController, titleText: "Admin password", descriptionText: "Provide admin password to login", hintText: "E.g. 1423",
+                  Dialogs.oneInputDialog(adminPassController, context, titleText: "Admin password", descriptionText: "Provide admin password to login", hintText: "E.g. 1423",
                     onCancel: (){
                       Fluttertoast.showToast(msg: "Canceled", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey[700], textColor: Colors.white);
                       Navigator.pop(context);  
@@ -82,53 +83,6 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-    );
-  }
-
-
-  void dialog(TextEditingController textCtrl, {titleText, descriptionText, hintText, onCancel, onSend}){    
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context){
-        return AlertDialog(
-          backgroundColor: Colors.grey[800],
-          title: Text(titleText ,style: TextStyle(color: Colors.white)),            
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(descriptionText ,style: TextStyle(color: Colors.white)),
-                SizedBox(height: 20),
-                TextField(
-                  keyboardType: TextInputType.visiblePassword,
-                  style: TextStyle(
-                    color: Colors.white
-                  ),
-                  controller: textCtrl,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[200])),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[600])),
-                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[200])),
-                    hintText: hintText,
-                    hintStyle: TextStyle(color: Colors.grey[500]),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Cancel"),
-              onPressed: onCancel,
-            ),
-            FlatButton(
-              child: Text("Send", style: TextStyle(color: Colors.white),),
-              color: Colors.lightGreen,
-              onPressed: onSend,
-            )
-          ],
-        );
-      }
     );
   }
 }
