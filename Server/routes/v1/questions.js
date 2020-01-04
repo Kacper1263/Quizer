@@ -151,6 +151,46 @@ router.post("/", (req,res) => {
     })
 })
 
+router.delete('/delete/:id', (req, res) => {
+    db.read();
+
+    if(adminPassword != req.body.password){
+        return res.send({
+            success: 'false',
+            message: 'Bad password'
+        })
+    }
+    
+    const id = parseInt(req.params.id, 10);
+
+    var list = db.get("questions").value();
+    var success = false;
+    var indexToDelete = list.findIndex(question => question.id === id);
+
+    if(indexToDelete != -1){
+        success = true;
+        if(db.get("questions").splice(indexToDelete, 1).write()){
+            return res.status(200).send({
+                success: 'true',
+                message: 'Question deleted successfully',
+            }); 
+        }
+        else{
+            return res.status(500).send({
+                success: 'false',
+                message: 'Question found but can\'t be deleted',
+            });
+        }
+    }
+
+    if(!success){
+        return res.status(404).send({
+            success: 'false',
+            message: 'Question not found. Wrong ID',
+        });
+    }
+})
+
 function randomFromZeroToNine(){
     return Math.floor(Math.random() * 10).toString();
 }
