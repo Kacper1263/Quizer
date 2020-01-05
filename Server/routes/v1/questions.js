@@ -169,18 +169,28 @@ router.delete('/delete/:id', (req, res) => {
 
     if(indexToDelete != -1){
         success = true;
+        
+        //Delete img from folder if needed
+        if(list[indexToDelete].img != "null"){
+            fs.unlink(list[indexToDelete].img, (err) => {
+                if(err){
+                    console.log("Cant delete image")
+                }    
+            })
+        }
+        
         if(db.get("questions").splice(indexToDelete, 1).write()){
-            return res.status(200).send({
+            res.status(200).send({
                 success: 'true',
                 message: 'Question deleted successfully',
             }); 
         }
         else{
-            return res.status(500).send({
+            res.status(500).send({
                 success: 'false',
                 message: 'Question found but can\'t be deleted',
             });
-        }
+        }        
     }
 
     if(!success){
@@ -189,6 +199,7 @@ router.delete('/delete/:id', (req, res) => {
             message: 'Question not found. Wrong ID',
         });
     }
+
 })
 
 function randomFromZeroToNine(){
