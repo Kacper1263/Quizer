@@ -33,7 +33,7 @@ class _ViewAllState extends State<ViewAll> {
               color: Colors.grey[700],
               child: ListTile(
                 title: Text(
-                  "${questions[index].id}) ${questions[index].question}",
+                  "${index+1}) ${questions[index].question}",
                   style: TextStyle(fontSize: 23, color: Colors.white)
                 ),
                 trailing: Row(
