@@ -15,9 +15,7 @@ try {
 const express = require('express')
 const bodyParser = require('body-parser')
 const fs = require('fs')
-const path = require('path')
 const readline = require('readline-sync')
-const lt = require('localtunnel')
 
 //#region Config variables
 var localtunnelEnabled = false;
