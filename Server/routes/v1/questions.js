@@ -167,7 +167,7 @@ router.put('/:id', (req, res) => {
 
     if(indexToEdit != -1){
         success = true;
-
+        
         const newQuestion = {
             id: id,
             question: req.body.question,
@@ -180,7 +180,7 @@ router.put('/:id', (req, res) => {
         }
 
         if(newQuestion.img != "null"){
-            var realImg = Buffer.from(question.img, "base64")
+            var realImg = Buffer.from(newQuestion.img, "base64")
     
             //Delete spaces from filename
             req.body.filename = req.body.filename.replace(/\s+/g, '_')
@@ -196,14 +196,16 @@ router.put('/:id', (req, res) => {
                 }
                 else{
                     newQuestion.img = "img/" + req.body.filename
-                    // db.get("questions").push(question).write();
-                    // return res.send({
-                    //     success: "true",
-                    //     message: "Question added successfully",
-                    //     content: question
-                    // })
+                    if(db.get("questions").splice(indexToEdit, 1, newQuestion).write()){ //Replace old with new
+                        return res.status(201).send({
+                            success: 'true',
+                            message: 'Question replaced successfully',
+                            content: newQuestion,
+                        });
+                    }
                 }
             })
+            return
         }
 
         if(db.get("questions").splice(indexToEdit, 1, newQuestion).write()){ //Replace old with new

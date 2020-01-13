@@ -52,7 +52,7 @@ class _EditQuestionState extends State<EditQuestion>{
       answer4TextCtrl.text = data['answer4'];
       goodAnswerTextCtrl.text = data['goodAnswer'];
       if(data['img'] != "null"){
-        imageUrl = data['img'] ;
+        imageUrl = data['img'] ;        
       }
     }
 
