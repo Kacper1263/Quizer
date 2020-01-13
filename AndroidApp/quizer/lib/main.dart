@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizer/pages/addQuestion.dart';
 import 'package:quizer/pages/adminPanel.dart';
+import 'package:quizer/pages/editQuestion.dart';
 import 'package:quizer/pages/game.dart';
 import 'package:quizer/pages/home.dart';
 import 'package:quizer/pages/loading.dart';
@@ -22,6 +23,7 @@ void main() => runApp(MaterialApp(
         '/status': (context) => Status(),
         '/loadingScreen': (context) => LoadingScreen(),
         '/viewAll': (context) => ViewAll(),
+        '/editQuestion': (context) => EditQuestion(),
       },
       theme: ThemeData(
         primaryColor: Colors.grey[850],

@@ -151,6 +151,84 @@ router.post("/", (req,res) => {
     })
 })
 
+router.put('/:id', (req, res) => {
+    db.read();
+    if(adminPassword != req.body.password){
+        return res.send({
+            success: 'false',
+            message: 'Bad password'
+        })
+    }
+    const id = parseInt(req.params.id, 10);
+    
+    var list = db.get("questions").value();
+    var success = false;
+    var indexToEdit = list.findIndex(question => question.id === id);
+
+    if(indexToEdit != -1){
+        success = true;
+
+        const newQuestion = {
+            id: id,
+            question: req.body.question,
+            img: req.body.img,
+            answer1: req.body.answer1,
+            answer2: req.body.answer2,
+            answer3: req.body.answer3,
+            answer4: req.body.answer4,
+            goodAnswer: req.body.goodAnswer
+        }
+
+        if(newQuestion.img != "null"){
+            var realImg = Buffer.from(question.img, "base64")
+    
+            //Delete spaces from filename
+            req.body.filename = req.body.filename.replace(/\s+/g, '_')
+    
+            req.body.filename = `${Date.now()}__${req.body.filename}`
+            fs.writeFile(`img/${req.body.filename}`, realImg, function(err){
+                if(err){
+                    console.log(err)
+                    return res.send({
+                        success: "false",
+                        message: err
+                    })
+                }
+                else{
+                    newQuestion.img = "img/" + req.body.filename
+                    // db.get("questions").push(question).write();
+                    // return res.send({
+                    //     success: "true",
+                    //     message: "Question added successfully",
+                    //     content: question
+                    // })
+                }
+            })
+        }
+
+        if(db.get("questions").splice(indexToEdit, 1, newQuestion).write()){ //Replace old with new
+            return res.status(201).send({
+                success: 'true',
+                message: 'Question replaced successfully',
+                content: newQuestion,
+            });
+        }
+        else{
+            return res.status(500).send({
+                success: 'false',
+                message: 'Old question found but can\'t be deleted',
+            });
+        }
+    }
+
+    if(!success){
+        return res.status(404).send({
+            success: 'false',
+            message: 'Question not found. Wrong ID',
+        });
+    }
+})
+
 router.delete('/delete/:id', (req, res) => {
     db.read();
 

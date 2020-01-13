@@ -43,7 +43,19 @@ class _ViewAllState extends State<ViewAll> {
                       icon: Icon(Icons.edit),
                       color: Colors.white,
                       onPressed: (){
-                        print("Edit question ID: ${questions[index].id.toString()}");
+                        Navigator.pushNamed(context, '/editQuestion', arguments: {
+                          "url": data['url'],
+                          "id": questions[index].id,
+                          "questionText": questions[index].question,
+                          "answer1": questions[index].answer1,
+                          "answer2": questions[index].answer2,
+                          "answer3": questions[index].answer3,
+                          "answer4": questions[index].answer4,
+                          "goodAnswer": questions[index].goodAnswer,
+                          "img": questions[index].img,
+                          "password": data['password'],
+                          "dataForLoading": data
+                        });
                       },
                     ),
                     IconButton(
