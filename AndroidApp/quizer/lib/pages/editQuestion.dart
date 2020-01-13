@@ -279,7 +279,8 @@ class _EditQuestionState extends State<EditQuestion>{
                               "answer3": answer3TextCtrl.text,
                               "answer4": answer4TextCtrl.text,
                               "goodAnswer": goodAnswerTextCtrl.text,
-                              "password": data['password']
+                              "password": data['password'],
+                              "oldImg": imageUrl != "null" ? "true" : "false"
                             }).timeout(Duration(seconds: 300));
                             print(response.body);
                             Map responseJson = jsonDecode(response.body);

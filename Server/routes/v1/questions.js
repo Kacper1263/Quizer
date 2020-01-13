@@ -167,7 +167,7 @@ router.put('/:id', (req, res) => {
 
     if(indexToEdit != -1){
         success = true;
-        
+        var oldImg = list[indexToEdit].img
         const newQuestion = {
             id: id,
             question: req.body.question,
@@ -206,6 +206,10 @@ router.put('/:id', (req, res) => {
                 }
             })
             return
+        }
+        else{
+            if(req.body.oldImg == "true") newQuestion.img = oldImg
+            else newQuestion.img = "null"
         }
 
         if(db.get("questions").splice(indexToEdit, 1, newQuestion).write()){ //Replace old with new
