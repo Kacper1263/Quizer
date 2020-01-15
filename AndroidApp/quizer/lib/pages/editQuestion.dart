@@ -227,7 +227,7 @@ class _EditQuestionState extends State<EditQuestion>{
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),
                     hintText: "E.g.: 2",
-                    errorText: goodAnswerTextCtrl.text.isNotEmpty && !goodAnswerTextCtrl.text.startsWith('-') && !goodAnswerTextCtrl.text.startsWith('+') && !goodAnswerTextCtrl.text.startsWith('.') && !goodAnswerTextCtrl.text.startsWith(',') && !goodAnswerTextCtrl.text.startsWith(' ') ? (int.parse(goodAnswerTextCtrl.text) >=  1 && int.parse(goodAnswerTextCtrl.text) <=  4 ? null : errorTextGoodAnswer) : errorTextGoodAnswer,
+                    errorText: goodAnswerTextCtrl.text.isNotEmpty && isNumeric(goodAnswerTextCtrl.text) && !goodAnswerTextCtrl.text.startsWith('-') && !goodAnswerTextCtrl.text.startsWith('+') && !goodAnswerTextCtrl.text.startsWith('.') && !goodAnswerTextCtrl.text.startsWith(',') && !goodAnswerTextCtrl.text.startsWith(' ') ? (int.parse(goodAnswerTextCtrl.text) >=  1 && int.parse(goodAnswerTextCtrl.text) <=  4 ? null : errorTextGoodAnswer) : errorTextGoodAnswer,
                     hintStyle: TextStyle(color: Colors.grey[500]),
                   ),
                 ),
@@ -330,5 +330,12 @@ class _EditQuestionState extends State<EditQuestion>{
     else{
       Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
     }
+  }
+
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
   }
 }

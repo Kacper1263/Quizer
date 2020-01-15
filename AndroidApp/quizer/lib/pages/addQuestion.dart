@@ -22,6 +22,7 @@ class _AddQuestionState extends State<AddQuestion>{
   TextEditingController answer4TextCtrl = new TextEditingController();
   TextEditingController goodAnswerTextCtrl = new TextEditingController();
   File image;
+  bool sended;
 
   String errorTextAll;
   String errorTextGoodAnswer;
@@ -31,6 +32,7 @@ class _AddQuestionState extends State<AddQuestion>{
     image = null;
     errorTextAll = null;
     errorTextGoodAnswer = null;
+    sended = false;
     super.initState();
   }
 
@@ -191,7 +193,7 @@ class _AddQuestionState extends State<AddQuestion>{
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[200])),
                     hintText: "E.g.: 2",
-                    errorText: goodAnswerTextCtrl.text.isNotEmpty && !goodAnswerTextCtrl.text.startsWith('-') && !goodAnswerTextCtrl.text.startsWith('+') && !goodAnswerTextCtrl.text.startsWith('.') && !goodAnswerTextCtrl.text.startsWith(',') && !goodAnswerTextCtrl.text.startsWith(' ') ? (int.parse(goodAnswerTextCtrl.text) >=  1 && int.parse(goodAnswerTextCtrl.text) <=  4 ? null : errorTextGoodAnswer) : errorTextGoodAnswer,
+                    errorText: goodAnswerTextCtrl.text.isNotEmpty && isNumeric(goodAnswerTextCtrl.text) && !goodAnswerTextCtrl.text.startsWith('-') && !goodAnswerTextCtrl.text.startsWith('+') && !goodAnswerTextCtrl.text.startsWith('.') && !goodAnswerTextCtrl.text.startsWith(',') && !goodAnswerTextCtrl.text.startsWith(' ') ? (int.parse(goodAnswerTextCtrl.text) >=  1 && int.parse(goodAnswerTextCtrl.text) <=  4 ? null : errorTextGoodAnswer) : errorTextGoodAnswer,
                     hintStyle: TextStyle(color: Colors.grey[500]),
                   ),
                 ),
@@ -208,7 +210,7 @@ class _AddQuestionState extends State<AddQuestion>{
                     FlatButton(
                       child: Text("Send",style: TextStyle(color: Colors.white)),
                       color: Colors.lightGreen,
-                      onPressed: () async {
+                      onPressed: sended ? null : () async {
                         setState(() {
                           errorTextAll = "This field can't be empty!";
                           errorTextGoodAnswer = "This value must be from 1 to 4";
@@ -226,7 +228,7 @@ class _AddQuestionState extends State<AddQuestion>{
                           ){
                             return;
                           }
-                          
+                          sended = true;
                           String base64Image = "null";
                           String fileName = "null";
                           if(image != null){
@@ -288,5 +290,12 @@ class _AddQuestionState extends State<AddQuestion>{
     else{
       Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
     }
+  }
+
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
   }
 }
