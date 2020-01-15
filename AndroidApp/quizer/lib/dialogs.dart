@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Dialogs {
-  static oneInputDialog(TextEditingController textCtrl, context, {titleText, descriptionText, hintText, onCancel, onSend}){    
+  static oneInputDialog(TextEditingController textCtrl, context, {titleText, descriptionText, hintText, onCancel, onSend, sendText: "Send", cancelText: "Cancel"}){    
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -33,11 +33,11 @@ class Dialogs {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text("Cancel"),
+              child: Text(cancelText),
               onPressed: onCancel,
             ),
             FlatButton(
-              child: Text("Send", style: TextStyle(color: Colors.white),),
+              child: Text(sendText, style: TextStyle(color: Colors.white),),
               color: Colors.lightGreen,
               onPressed: onSend,
             )

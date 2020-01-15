@@ -179,6 +179,15 @@ router.put('/:id', (req, res) => {
             goodAnswer: req.body.goodAnswer
         }
 
+        // Delete old img
+        if(oldImg != "null" && newQuestion.img == "null"){
+            fs.unlink(oldImg, (err) => {
+                if(err){
+                    console.log("Cant delete image: " + oldImg)
+                }    
+            })
+        }
+
         if(newQuestion.img != "null"){
             var realImg = Buffer.from(newQuestion.img, "base64")
     
@@ -196,6 +205,15 @@ router.put('/:id', (req, res) => {
                 }
                 else{
                     newQuestion.img = "img/" + req.body.filename
+                    // Delete old img
+                    if(oldImg != "null" && newQuestion.img != oldImg){
+                        fs.unlink(oldImg, (err) => {
+                            if(err){
+                                console.log("Cant delete image: " + oldImg)
+                            }    
+                        })
+                    }
+
                     if(db.get("questions").splice(indexToEdit, 1, newQuestion).write()){ //Replace old with new
                         return res.status(201).send({
                             success: 'true',
@@ -258,7 +276,7 @@ router.delete('/delete/:id', (req, res) => {
         if(list[indexToDelete].img != "null"){
             fs.unlink(list[indexToDelete].img, (err) => {
                 if(err){
-                    console.log("Cant delete image")
+                    console.log("Cant delete image: " + list[indexToDelete].img)
                 }    
             })
         }
