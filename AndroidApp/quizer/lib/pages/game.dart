@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:quizer/pages/summary.dart';
 import 'package:quizer/question.dart';
 
 class Game extends StatefulWidget {
@@ -82,17 +81,17 @@ class _GameState extends State<Game> with WidgetsBindingObserver {
             Text(questions[questionNow].question, style: TextStyle(color: Colors.white, fontSize: 30)),
             SizedBox(height: 20),
             questions[questionNow].img == "null" ? Container() : Image.network("${data['url']}/api/v1/${questions[questionNow].img}",
-            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-              if (loadingProgress == null)
-                return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                      : null,
-                ),
-              );
-            },
+              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null)
+                  return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                        : null,
+                  ),
+                );
+              }
             ),
             SizedBox(height: 30),
             OutlineButton(

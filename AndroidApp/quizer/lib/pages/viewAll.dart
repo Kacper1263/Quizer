@@ -68,20 +68,26 @@ class _ViewAllState extends State<ViewAll> {
                             Navigator.pop(context);
                           },
                           onSend: () async {
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, '/loadingScreen', arguments: {"text": "Deleting"});
-                            Response response = await delete(data['url']+"/api/v1/questions/delete/${questions[index].id}", headers: {"password": data['password']}).timeout(Duration(seconds: 60));
-                            Map responseJson = jsonDecode(response.body);
-                            print(data['password']);
+                            try{
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/loadingScreen', arguments: {"text": "Deleting"});
+                              Response response = await delete(data['url']+"/api/v1/questions/delete/${questions[index].id}", headers: {"password": data['password']}).timeout(Duration(seconds: 60));
+                              Map responseJson = jsonDecode(response.body);
+                              print(data['password']);
 
-                            if(responseJson['success'] == "true"){
-                              Fluttertoast.showToast(msg: "Deleted", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.lightGreen, textColor: Colors.white);
+                              if(responseJson['success'] == "true"){
+                                Fluttertoast.showToast(msg: "Deleted", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.lightGreen, textColor: Colors.white);
+                              }
+                              else{
+                                Fluttertoast.showToast(msg: "Error: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                              }
+                              Navigator.pop(context);
+                              Navigator.pushReplacementNamed(context, '/loading', arguments: data);
                             }
-                            else{
-                              Fluttertoast.showToast(msg: "Error: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                            catch(e){
+                              Navigator.pop(context);
+                              whatError(e);
                             }
-                            Navigator.pop(context);
-                            Navigator.pushReplacementNamed(context, '/loading', arguments: data);
                           }
                         );
                       },
@@ -99,5 +105,23 @@ class _ViewAllState extends State<ViewAll> {
         )
       ),
     );
+  }
+
+  void whatError(e){
+    if(e.toString().startsWith("TimeoutException after")){
+      Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("FormatException")){
+      Fluttertoast.showToast(msg: "Format Exception!\n\nProbably connected to IP but can't connect to Quizer server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("SocketException")){
+      Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else if(e.toString().startsWith("type 'int' is not")){
+      Fluttertoast.showToast(msg: "Can't connect to server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+    else{
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
   }
 }
