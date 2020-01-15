@@ -96,7 +96,7 @@ class _EditQuestionState extends State<EditQuestion>{
                     );
                   },
                   )) : Image.file(image), //! If there is not image show empty container
-                FlatButton.icon(icon: Icon(Icons.delete_forever, color: Colors.white, size: 35,), label: Text("Delete image", style: TextStyle(color: Colors.white),),
+                image == null && imageUrl == "null" ? Container() : FlatButton.icon(icon: Icon(Icons.delete_forever, color: Colors.white, size: 35,), label: Text("Delete image", style: TextStyle(color: Colors.white),),
                   onPressed: (){
                     setState(() {
                       image = null;
