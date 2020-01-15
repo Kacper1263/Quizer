@@ -25,6 +25,7 @@ class _EditQuestionState extends State<EditQuestion>{
   File image;
   String imageUrl = "null";
   bool loaded;
+  bool sended;
 
   String errorTextAll;
   String errorTextGoodAnswer;
@@ -36,6 +37,7 @@ class _EditQuestionState extends State<EditQuestion>{
     errorTextGoodAnswer = null;
     super.initState();
     loaded = false;
+    sended = false;
   }
 
   @override
@@ -242,7 +244,7 @@ class _EditQuestionState extends State<EditQuestion>{
                     FlatButton(
                       child: Text("Send",style: TextStyle(color: Colors.white)),
                       color: Colors.lightGreen,
-                      onPressed: () async {
+                      onPressed: sended ? null : () async {
                         setState(() {
                           errorTextAll = "This field can't be empty!";
                           errorTextGoodAnswer = "This value must be from 1 to 4";
@@ -260,7 +262,7 @@ class _EditQuestionState extends State<EditQuestion>{
                           ){
                             return;
                           }
-                          
+                          sended = true;
                           String base64Image = "null";
                           String fileName = "null";
                           if(image != null){
@@ -293,6 +295,9 @@ class _EditQuestionState extends State<EditQuestion>{
                               Fluttertoast.showToast(msg: "Error message: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
                             }                                  
                           }catch(e){
+                            setState(() {
+                              sended = false;
+                            });
                             whatError(e);
                           }
                         }
