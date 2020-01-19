@@ -258,6 +258,9 @@ class _AddQuestionState extends State<AddQuestion>{
                               Fluttertoast.showToast(msg: "Error message: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
                             }                                  
                           }catch(e){
+                            setState(() {
+                              sended = false;
+                            });
                             whatError(e);
                           }
                         }
