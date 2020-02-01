@@ -32,7 +32,7 @@ class _LoadingState extends State<Loading> {
       setState(() {
         loadingText = "Connecting\nto\nserver";
       });      
-      Response response = await get(url+"/api/v1/status").timeout(Duration(seconds: 60));
+      Response response = await get(url+"/api/v1/status").timeout(Duration(seconds: 20));
       Map responseJson = jsonDecode(response.body);
       if(responseJson['success'] == "true"){
         List<Question> _questions;
@@ -87,7 +87,7 @@ class _LoadingState extends State<Loading> {
       setState(() {
         loadingText = "Connecting\nto\nserver";
       });      
-      Response response = await get(url+"/api/v1/status").timeout(Duration(seconds: 60));
+      Response response = await get(url+"/api/v1/status").timeout(Duration(seconds: 20));
       Map responseJson = jsonDecode(response.body);
       if(responseJson['success'] == "true"){
 
