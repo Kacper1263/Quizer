@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:quizer/dialogs.dart';
 import 'package:quizer/pages/game.dart';
+import 'package:quizer/pages/summary.dart';
 import 'package:quizer/question.dart';
 
 class ViewAll extends StatefulWidget {
@@ -23,6 +24,16 @@ class _ViewAllState extends State<ViewAll> {
       appBar: AppBar(
         title: Text("All questions"),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add_circle),
+            tooltip: "Add new",
+            onPressed: () async {
+              var result = await Navigator.pushNamed(context, "/addQuestion", arguments: {"url": data['url'], "password": data['password']});
+              if(result == true) Navigator.pushReplacementNamed(context, '/loading', arguments: data); // Refresh data
+            }
+          )
+        ],
       ),
       body: Container(
         color: Colors.grey[800],
@@ -42,6 +53,7 @@ class _ViewAllState extends State<ViewAll> {
                     IconButton(
                       icon: Icon(Icons.edit),
                       color: Colors.white,
+                      tooltip: "Edit question",
                       onPressed: (){
                         Navigator.pushNamed(context, '/editQuestion', arguments: {
                           "url": data['url'],
@@ -61,6 +73,7 @@ class _ViewAllState extends State<ViewAll> {
                     IconButton(
                       icon: Icon(Icons.delete_forever),
                       color: Colors.white,
+                      tooltip: "Delete question",
                       onPressed: (){
                         Dialogs.confirmDialog(context, titleText: "Confirm delete", descriptionText: "Are you sure you want to delete (forever) this question?",
                           onCancel: (){
@@ -94,10 +107,8 @@ class _ViewAllState extends State<ViewAll> {
                     ),
                   ],
                 ),
-                onTap: () {      // Add 9 lines from here...
-                  setState(() {
-                    print("Show question ID: ${questions[index].id.toString()}");
-                  });
+                onTap: () async {      // Add 9 lines from here...
+                  await Navigator.pushNamed(context, '/viewQuestion', arguments: {"question": questions[index], "url": data["url"], "password": data["password"], "dataForLoading": data});
                 },
               ),
             );

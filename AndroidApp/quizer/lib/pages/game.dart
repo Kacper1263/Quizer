@@ -71,6 +71,7 @@ class _GameState extends State<Game> with WidgetsBindingObserver {
     return Scaffold(
       appBar: AppBar(
         title: Text("Quizer"),
+        centerTitle: true,
       ),
       body: Container(
         color: Colors.grey[900],

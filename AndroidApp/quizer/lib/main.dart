@@ -9,6 +9,7 @@ import 'package:quizer/pages/loadingScreen.dart';
 import 'package:quizer/pages/status.dart';
 import 'package:quizer/pages/summary.dart';
 import 'package:quizer/pages/viewAll.dart';
+import 'package:quizer/pages/viewQuestion.dart';
 
 void main() => runApp(MaterialApp(
       title: "Quizer",
@@ -23,6 +24,7 @@ void main() => runApp(MaterialApp(
         '/status': (context) => Status(),
         '/loadingScreen': (context) => LoadingScreen(),
         '/viewAll': (context) => ViewAll(),
+        '/viewQuestion': (context) => ViewQuestion(),
         '/editQuestion': (context) => EditQuestion(),
       },
       theme: ThemeData(

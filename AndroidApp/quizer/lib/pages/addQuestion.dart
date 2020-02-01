@@ -252,7 +252,7 @@ class _AddQuestionState extends State<AddQuestion>{
                             Map responseJson = jsonDecode(response.body);
                             if(responseJson['success'] == "true"){
                               Fluttertoast.showToast(msg: "Success!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.green, textColor: Colors.white);
-                              Navigator.pop(context);
+                              Navigator.pop(context, true);
                             }
                             else{
                               Fluttertoast.showToast(msg: "Error message: ${responseJson['message']}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
