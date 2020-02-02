@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:quizer/dialogs.dart';
+import 'package:quizer/globalVariables.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -17,6 +19,64 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text("Quizer"),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.info, color: Colors.white,),
+            tooltip: "About",
+            onPressed: (){
+              showDialog(
+                context: context, 
+                builder: (BuildContext context) => AlertDialog(
+                  title: Center(child: Text("About app", style: TextStyle(color: Colors.white),)),
+                  contentTextStyle: TextStyle(color: Colors.white),
+                  backgroundColor: Colors.grey[800],
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text("App version: ${GlobalVariables.appVersion}"),
+                          Text("Author: Kacper Marcinkiewicz"),
+                        ],
+                      ),
+                      SizedBox(height: 20,),
+                      Column(
+                        children: <Widget>[
+                          RaisedButton(
+                            child: Text("GitHub Source"),
+                            onPressed: ()async{
+                              const url = 'https://github.com/Kacper1263/Quizer';
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Fluttertoast.showToast(msg: "Could not lunch: $url", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                              }
+                            },
+                          ),
+                          RaisedButton(
+                            child: Text("License: MIT"),
+                            onPressed: ()async{
+                              const url = 'https://github.com/Kacper1263/Quizer/blob/master/LICENSE';
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Fluttertoast.showToast(msg: "Could not lunch: $url", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+                              }
+                            },
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  actions: <Widget>[
+                    FlatButton(onPressed: () => Navigator.pop(context), child: Text("Close"))
+                  ],
+                ) 
+              );
+            },
+          )
+        ],
       ),
       body: Container(
         color: Colors.grey[900],
