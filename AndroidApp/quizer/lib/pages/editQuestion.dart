@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -85,19 +86,25 @@ class _EditQuestionState extends State<EditQuestion>{
                     side: BorderSide(color: Colors.white)
                   )
                 ),
-                image == null ? (imageUrl == "null" ? Container() : Image.network("${data['url']}/api/v1/${data['img']}",
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null)
-                      return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                            : null,
-                      ),
-                    );
-                  },
-                  )) : Image.file(image), //! If there is not image show empty container
+                image == null ? (imageUrl == "null" ? Container() : //Image.network("${data['url']}/api/v1/${data['img']}",
+                  // loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                  //   if (loadingProgress == null)
+                  //     return child;
+                  //   return Center(
+                  //     child: CircularProgressIndicator(
+                  //       value: loadingProgress.expectedTotalBytes != null
+                  //           ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                  //           : null,
+                  //     ),
+                  //   );
+                  // },
+                  // )
+                  CachedNetworkImage(
+                    imageUrl: "${data['url']}/api/v1/${data['img']}",
+                    placeholder: (context, url) => Center(child: CircularProgressIndicator(value: null)),
+                    errorWidget: (context, url, error) => Icon(Icons.error_outline, color: Colors.red, size: 90,),              
+                  )
+                ) : Image.file(image), //! If there is not image show empty container
                 image == null && imageUrl == "null" ? Container() : FlatButton.icon(icon: Icon(Icons.delete_forever, color: Colors.white, size: 35,), label: Text("Delete image", style: TextStyle(color: Colors.white),),
                   onPressed: (){
                     setState(() {
