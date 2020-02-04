@@ -228,7 +228,17 @@ router.put('/:id', (req, res) => {
                     })
                 }
             }
-            else newQuestion.img = "null"
+            else {
+                newQuestion.img = "null"
+                // Delete old img
+                if(oldImg != "null" && newQuestion.img == "null"){
+                    fs.unlink(oldImg, (err) => {
+                        if(err){
+                            console.log("Cant delete image: " + oldImg + "  Old img: " + oldImg + "  New img is null")
+                        }    
+                    })
+                }
+            }
         }
 
         if(db.get("questions").splice(indexToEdit, 1, newQuestion).write()){ //Replace old with new

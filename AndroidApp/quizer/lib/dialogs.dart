@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class Dialogs {
   static oneInputDialog(TextEditingController textCtrl, context, {titleText, descriptionText, hintText, onCancel, onSend, sendText: "Send", cancelText: "Cancel"}){    
-    showDialog(
+    return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context){
         return AlertDialog(
           backgroundColor: Colors.grey[800],
-          title: Text(titleText ,style: TextStyle(color: Colors.white)),            
+          title: Center(child: Text(titleText ,style: TextStyle(color: Colors.white))),            
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -48,13 +48,13 @@ class Dialogs {
   }
 
   static confirmDialog(context, {titleText, descriptionText, onCancel, onSend}){
-    showDialog(
+    return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context){
         return AlertDialog(
           backgroundColor: Colors.grey[800],
-          title: Text(titleText ,style: TextStyle(color: Colors.white)),            
+          title: Center(child: Text(titleText ,style: TextStyle(color: Colors.white))),            
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[

@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quizer/dialogs.dart';
 import 'package:quizer/pages/summary.dart';
 
 class EditQuestion extends StatefulWidget {
@@ -272,7 +273,19 @@ class _EditQuestionState extends State<EditQuestion>{
                             ){
                               return;
                             }
-                            sended = true;
+                            // check is someone trying to send image through localtunnel
+                            bool _continue = false;
+                            if(image != null && data['url'].contains("localtunnel.me"))_continue = await Dialogs.confirmDialog(context, titleText: "Uploading image", descriptionText: "You are trying to upload image to server through localtunnel domain. Keep in mind that you may receive an error due to the localtunnel file size limit! If you encounter a problem while sending a question, try connecting directly to the server by IP address. \n\nDo you want to continue?", onCancel: ()=>Navigator.pop(context,false), onSend: ()=>Navigator.pop(context,true));
+                            else _continue = true;
+                            if(!_continue) {
+                              print(image);
+                              Fluttertoast.showToast(msg: "Canceled", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.grey, textColor: Colors.white);
+                              return;
+                            }
+                            
+                            setState(() {
+                              sended = true;
+                            });
                             String base64Image = "null";
                             String fileName = "null";
                             if(image != null){
@@ -330,7 +343,7 @@ class _EditQuestionState extends State<EditQuestion>{
       Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
     }
     else if(e.toString().startsWith("FormatException")){
-      Fluttertoast.showToast(msg: "Format Exception!\n\nProbably connected to IP but can't connect to Quizer server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+      Fluttertoast.showToast(msg: "Format Exception!\n\nProbably connected to IP but can't connect to Quizer server or received html response!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
     }
     else if(e.toString().startsWith("SocketException")){
       Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
