@@ -92,24 +92,18 @@ if (localtunnelEnabled) {
             console.log();
             console.log("Restarting tunnel...");
 
-            tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain}, function (err, tunnel) {
-                if (err) {
-                    console.log("Error while creating tunnel: " + err);
-                    readline.keyInPause("\nProgram ended...")
-                    process.exit();
-                }
+            tunnel = await localtunnel(tunnelPort, { subdomain: tunnelSubdomain})
+            
+            console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
 
-                console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
+            if (tunnel.url != tunnelUrlUWant) {
+                console.log("Error! Subdomain in use!");
+                readline.keyInPause("\nProgram ended...")
+                process.exit();
+            }
 
-                if (tunnel.url != tunnelUrlUWant) {
-                    console.log("Error! Subdomain in use!");
-                    readline.keyInPause("\nProgram ended...")
-                    process.exit();
-                }
-
-                console.log("");
-                restartingTunnel = false;
-            });
+            console.log("");
+            restartingTunnel = false;
         });
     })()
 }
