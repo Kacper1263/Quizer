@@ -1,8 +1,0 @@
-{
-  "localtunnelEnabled": false,
-  "tunnelUrl": "quizer",
-  "adminPassword": "1263",
-  "databaseName": "questions",
-  "apiPort": 5000,
-  "tunnelPort": 5000
-}
