@@ -59,7 +59,7 @@ try {
 //#endregion
 
 const localtunnel = require('localtunnel')
-var tunnelSubdomain = tunnelUrl[0] || ""
+var tunnelSubdomain = tunnelUrl || ""
 if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
 
 //#region localtunnel stuff
@@ -85,7 +85,7 @@ if (localtunnelEnabled) {
             process.exit();
         });
         var restartingTunnel = false;
-        tunnel.on('error', function (err) {
+        tunnel.on('error', async function (err) {
             if (restartingTunnel) return;
             restartingTunnel = true;
             console.log("Error on tunnel. Err: " + err);
