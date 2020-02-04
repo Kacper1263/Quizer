@@ -64,14 +64,10 @@ if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.loca
 
 //#region localtunnel stuff
 if (localtunnelEnabled) {
-    console.log("Starting API and tunnel...")
-    var tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain,}, function (err, tunnel) {
-        if (err) {
-            console.log("Error while creating tunnel: " + err);
-            readline.keyInPause("\nProgram ended...")
-            process.exit();
-        }
-
+    (async ()=>{
+        console.log("Starting API and tunnel...")
+        const tunnel = await localtunnel({port: tunnelPort, subdomain: tunnelSubdomain})
+        
         console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
 
         if (tunnelSubdomain == "") tunnelUrlUWant = tunnel.url
@@ -83,39 +79,39 @@ if (localtunnelEnabled) {
         }
 
         console.log("");
-    });
-    tunnel.on('close', function () {
-        console.log("Tunnel closed!");
-        readline.keyInPause("\nProgram ended...")
-        process.exit();
-    });
-    var restartingTunnel = false;
-    tunnel.on('error', function (err) {
-        if (restartingTunnel) return;
-        restartingTunnel = true;
-        console.log("Error on tunnel. Err: " + err);
-        console.log();
-        console.log("Restarting tunnel...");
-
-        tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain}, function (err, tunnel) {
-            if (err) {
-                console.log("Error while creating tunnel: " + err);
-                readline.keyInPause("\nProgram ended...")
-                process.exit();
-            }
-
-            console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
-
-            if (tunnel.url != tunnelUrlUWant) {
-                console.log("Error! Subdomain in use!");
-                readline.keyInPause("\nProgram ended...")
-                process.exit();
-            }
-
-            console.log("");
-            restartingTunnel = false;
+        tunnel.on('close', function () {
+            console.log("Tunnel closed!");
+            readline.keyInPause("\nProgram ended...")
+            process.exit();
         });
-    });
+        var restartingTunnel = false;
+        tunnel.on('error', function (err) {
+            if (restartingTunnel) return;
+            restartingTunnel = true;
+            console.log("Error on tunnel. Err: " + err);
+            console.log();
+            console.log("Restarting tunnel...");
+
+            tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain}, function (err, tunnel) {
+                if (err) {
+                    console.log("Error while creating tunnel: " + err);
+                    readline.keyInPause("\nProgram ended...")
+                    process.exit();
+                }
+
+                console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
+
+                if (tunnel.url != tunnelUrlUWant) {
+                    console.log("Error! Subdomain in use!");
+                    readline.keyInPause("\nProgram ended...")
+                    process.exit();
+                }
+
+                console.log("");
+                restartingTunnel = false;
+            });
+        });
+    })()
 }
 else{
     console.log("Starting only API...")
