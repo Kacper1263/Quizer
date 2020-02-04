@@ -151,8 +151,8 @@ app.use(function (req, res) {
     res.status(404).send({ success: 'false', code: 404, message: "Page not found! Bad API route!" });
 });
 
-app.listen(apiPort, () => {
-    console.log(`API running on port ${apiPort}`)
+app.listen(process.env.PORT || apiPort, () => {
+    console.log(`API running on port ${process.env.PORT || apiPort}`)
 });
 
 
