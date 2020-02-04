@@ -1,5 +1,5 @@
 {
-  "localtunnelEnabled": true,
+  "localtunnelEnabled": false,
   "tunnelUrl": "quizer",
   "adminPassword": "1263",
   "databaseName": "questions",
