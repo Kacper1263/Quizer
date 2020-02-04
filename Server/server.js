@@ -65,7 +65,7 @@ if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.loca
 //#region localtunnel stuff
 if (localtunnelEnabled) {
     console.log("Starting API and tunnel...")
-    var tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain, host: "http://localtunnel.me"}, function (err, tunnel) {
+    var tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain,}, function (err, tunnel) {
         if (err) {
             console.log("Error while creating tunnel: " + err);
             readline.keyInPause("\nProgram ended...")
@@ -97,7 +97,7 @@ if (localtunnelEnabled) {
         console.log();
         console.log("Restarting tunnel...");
 
-        tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain, host: "http://localtunnel.me" }, function (err, tunnel) {
+        tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain}, function (err, tunnel) {
             if (err) {
                 console.log("Error while creating tunnel: " + err);
                 readline.keyInPause("\nProgram ended...")
