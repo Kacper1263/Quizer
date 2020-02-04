@@ -59,7 +59,7 @@ try {
 //#endregion
 
 const localtunnel = require('localtunnel')
-var tunnelSubdomain = tunnelUrl[0] || ""
+var tunnelSubdomain = tunnelUrl || ""
 if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
 
 //#region localtunnel stuff
