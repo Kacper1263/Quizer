@@ -64,10 +64,14 @@ if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.loca
 
 //#region localtunnel stuff
 if (localtunnelEnabled) {
-    (async ()=>{
-        console.log("Starting API and tunnel...")
-        const tunnel = await localtunnel({port: tunnelPort, subdomain: tunnelSubdomain})
-        
+    console.log("Starting API and tunnel...")
+    var tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain, host: "http://localtunnel.me"}, function (err, tunnel) {
+        if (err) {
+            console.log("Error while creating tunnel: " + err);
+            readline.keyInPause("\nProgram ended...")
+            process.exit();
+        }
+
         console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
 
         if (tunnelSubdomain == "") tunnelUrlUWant = tunnel.url
@@ -79,21 +83,27 @@ if (localtunnelEnabled) {
         }
 
         console.log("");
-        tunnel.on('close', function () {
-            console.log("Tunnel closed!");
-            readline.keyInPause("\nProgram ended...")
-            process.exit();
-        });
-        var restartingTunnel = false;
-        tunnel.on('error', async function (err) {
-            if (restartingTunnel) return;
-            restartingTunnel = true;
-            console.log("Error on tunnel. Err: " + err);
-            console.log();
-            console.log("Restarting tunnel...");
+    });
+    tunnel.on('close', function () {
+        console.log("Tunnel closed!");
+        readline.keyInPause("\nProgram ended...")
+        process.exit();
+    });
+    var restartingTunnel = false;
+    tunnel.on('error', function (err) {
+        if (restartingTunnel) return;
+        restartingTunnel = true;
+        console.log("Error on tunnel. Err: " + err);
+        console.log();
+        console.log("Restarting tunnel...");
 
-            tunnel = await localtunnel(tunnelPort, { subdomain: tunnelSubdomain})
-            
+        tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain, host: "http://localtunnel.me" }, function (err, tunnel) {
+            if (err) {
+                console.log("Error while creating tunnel: " + err);
+                readline.keyInPause("\nProgram ended...")
+                process.exit();
+            }
+
             console.log("Tunnel started with url: " + tunnel.url + " on port: " + tunnelPort);
 
             if (tunnel.url != tunnelUrlUWant) {
@@ -105,7 +115,7 @@ if (localtunnelEnabled) {
             console.log("");
             restartingTunnel = false;
         });
-    })()
+    });
 }
 else{
     console.log("Starting only API...")
