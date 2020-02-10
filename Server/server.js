@@ -58,6 +58,20 @@ try {
 }
 //#endregion
 
+//#region check if folder "img" exists
+try{
+    if(!fs.existsSync('img')){
+        console.log("\nCreating img directory...")
+        fs.mkdirSync('img', {recursive: true})
+        console.log("Img directory created\n")
+    }
+}
+catch{
+    console.log("Can't create img directory")
+    return readline.keyInPause("\nProgram ended...")
+}
+//#endregion
+
 const localtunnel = require('localtunnel')
 var tunnelSubdomain = tunnelUrl || ""
 if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
