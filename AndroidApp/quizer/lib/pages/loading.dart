@@ -1,10 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:quizer/dialogs.dart';
 import 'package:quizer/globalVariables.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../question.dart';
 
@@ -41,9 +42,20 @@ class _LoadingState extends State<Loading> {
         //? Check server and app version
         String serverVersion = responseJson['serverVersion'].toString();
         if(serverVersion != GlobalVariables.appVersion){
-          //TODO: Add dialog with option to download version from server 
-          Navigator.pop(context);
-          Fluttertoast.showToast(msg: "Incompatible version off app and server. \nServer: $serverVersion \nApp: ${GlobalVariables.appVersion}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+          
+          Dialogs.confirmDialog(context, 
+            titleText: "Incompatible app", 
+            descriptionText: "Incompatible version off app and server. \n\nServer: $serverVersion \nApp: ${GlobalVariables.appVersion}\n\nDo you want do download compatible version from server?",
+            onCancel: (){
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            onSend: ()async{
+              await downloadApk(url+"/api/v1/apk/quizer.apk");
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
+          );
           return;
         }
 
@@ -183,6 +195,14 @@ class _LoadingState extends State<Loading> {
     }
     else{
       Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+  }
+
+  downloadApk(url)async{
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(msg: "Can't open URL", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
     }
   }
 }
