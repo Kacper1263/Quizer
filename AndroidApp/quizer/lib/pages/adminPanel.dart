@@ -87,7 +87,8 @@ class _AdminPanelState extends State<AdminPanel> {
                               "ping": ping.toString() + "ms",
                               "amountOfQuestions": responseJson['amountOfQuestions'],
                               "amountOfImages": responseJson['amountOfImages'],
-                              "imagesSize": responseJson['imagesSize']
+                              "imagesSize": responseJson['imagesSize'],
+                              "serverVersion": responseJson['serverVersion']
                             });
                           }
                           else if(responseJson['success'] == "false"){

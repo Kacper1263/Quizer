@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:quizer/globalVariables.dart';
 
 import '../question.dart';
 
@@ -36,6 +37,15 @@ class _LoadingState extends State<Loading> {
       Map responseJson = jsonDecode(response.body);
       if(responseJson['success'] == "true"){
         List<Question> _questions;
+
+        //? Check server and app version
+        String serverVersion = responseJson['serverVersion'].toString();
+        if(serverVersion != GlobalVariables.appVersion){
+          //TODO: Add dialog with option to download version from server 
+          Navigator.pop(context);
+          Fluttertoast.showToast(msg: "Incompatible version off app and server. \nServer: $serverVersion \nApp: ${GlobalVariables.appVersion}", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+          return;
+        }
 
         setState(() {
           loadingText = "Downloading\nquestions";

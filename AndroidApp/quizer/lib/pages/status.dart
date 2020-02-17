@@ -16,6 +16,7 @@ class _StatusState extends State<Status> {
     String amountOfQuestions = data['amountOfQuestions'].toString();
     String amountOfImages = data['amountOfImages'].toString();
     String imagesSize = data['imagesSize'].toString();
+    String serverVersion = data['serverVersion'].toString();
 
     return Scaffold(
       appBar: AppBar(
@@ -31,6 +32,7 @@ class _StatusState extends State<Status> {
             Text("Questions: ${amountOfQuestions == "null" ? "N/A" : amountOfQuestions}", style: TextStyle(color: Colors.white, fontSize: 27),),
             Text("Images: ${amountOfImages  == "null" ? "N/A" : amountOfImages}", style: TextStyle(color: Colors.white, fontSize: 27),),
             Text("Images (size): ${imagesSize  == "null" ? "N/A" : imagesSize}", style: TextStyle(color: Colors.white, fontSize: 27),),
+            Text("Server version: ${serverVersion  == "null" ? "N/A" : serverVersion}", style: TextStyle(color: Colors.white, fontSize: 27),),
           ],
         ),
       ),
