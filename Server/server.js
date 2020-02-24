@@ -58,6 +58,9 @@ try {
 }
 //#endregion
 
+// Check is password set
+if(adminPassword == "" || adminPassword == null) return console.log("You must set adminPassword in config.json!") 
+
 //#region check if folder "img" exists
 try{
     if(!fs.existsSync('img')){
