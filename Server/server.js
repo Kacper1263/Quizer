@@ -157,6 +157,9 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 //Routes API v1
 var routes_v1 = require('./routes/v1/index')
+app.get("/",function (req, res) {
+    res.status(200).send(`<h1>This is an API of Quizer game<h1/><br/><h3>If you are looking for documentation click <a href="https://documenter.getpostman.com/view/8809316/SzKYPHCM">here<a/><h3/><h3>If you are looking for app (apk) file for android click <a href="/api/v1/apk/quizer.apk">here<a/><h3/>`);
+});
 app.use("/api/v1/status", routes_v1.status)
 app.use("/api/v1/apk", express.static('apk')) 
 app.use("/api/v1/questions", routes_v1.questions)
@@ -167,6 +170,7 @@ app.use("/api/v1/img", express.static('img'))
 app.use(function (req, res) {
     res.status(404).send({ success: 'false', code: 404, message: "Page not found! Bad API route!" });
 });
+
 
 app.listen(process.env.PORT || apiPort, () => {
     console.log(`API running on port ${process.env.PORT || apiPort}`)
