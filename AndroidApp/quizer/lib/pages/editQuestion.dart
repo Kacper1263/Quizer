@@ -275,7 +275,7 @@ class _EditQuestionState extends State<EditQuestion>{
                             }
                             // check is someone trying to send image through localtunnel
                             bool _continue = false;
-                            if(image != null && data['url'].contains("localtunnel.me"))_continue = await Dialogs.confirmDialog(context, titleText: "Uploading image", descriptionText: "You are trying to upload image to server through localtunnel domain. Keep in mind that you may receive an error due to the localtunnel file size limit! If you encounter a problem while sending a question, try connecting directly to the server by IP address. \n\nDo you want to continue?", onCancel: ()=>Navigator.pop(context,false), onSend: ()=>Navigator.pop(context,true));
+                            if(image != null && (data['url'].contains("localtunnel.me") || data['url'].contains("serverless.social")))_continue = await Dialogs.confirmDialog(context, titleText: "Uploading image", descriptionText: "You are trying to upload image to server through localtunnel domain. Keep in mind that you may receive an error due to the localtunnel file size limit! If you encounter a problem while sending a question, try connecting directly to the server by IP address. \n\nDo you want to continue?", onCancel: ()=>Navigator.pop(context,false), onSend: ()=>Navigator.pop(context,true));
                             else _continue = true;
                             if(!_continue) {
                               print(image);

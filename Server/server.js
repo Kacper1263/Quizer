@@ -77,12 +77,15 @@ catch{
 
 const localtunnel = require('localtunnel')
 var tunnelSubdomain = tunnelUrl || ""
-if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
+//! OLD LT DOMAIN   if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
+if (tunnelSubdomain != "") var tunnelUrlUWant = `http://${tunnelSubdomain}.serverless.social`; //Full url for verification is domain in use
 
 //#region localtunnel stuff
 if (localtunnelEnabled) {
+    //? Temporary message
+    console.log("\nINFO: Due to problems with the localtunnel.me domain, tunnels will be generated at serverless.social\n")
     console.log("Starting API and tunnel... (keep in mind that you may not add a new question with photo to the database via localtunnel due to the file size limit!)")
-    var tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain}, function (err, tunnel) {
+    var tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain, host: "http://serverless.social"}, function (err, tunnel) {
         if (err) {
             console.log("Error while creating tunnel: " + err);
             readline.keyInPause("\nProgram ended...")
@@ -114,7 +117,7 @@ if (localtunnelEnabled) {
         console.log();
         console.log("Restarting tunnel...");
 
-        tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain }, function (err, tunnel) {
+        tunnel = localtunnel(tunnelPort, { subdomain: tunnelSubdomain, host: "http://serverless.social"}, function (err, tunnel) {
             if (err) {
                 console.log("Error while creating tunnel: " + err);
                 readline.keyInPause("\nProgram ended...")
