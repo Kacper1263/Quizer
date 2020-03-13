@@ -1,9 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:quizer/dialogs.dart';
+import 'package:quizer/globalVariables.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../question.dart';
 
@@ -36,6 +38,26 @@ class _LoadingState extends State<Loading> {
       Map responseJson = jsonDecode(response.body);
       if(responseJson['success'] == "true"){
         List<Question> _questions;
+
+        //? Check server and app version
+        String serverVersion = responseJson['serverVersion'].toString();
+        if(serverVersion != GlobalVariables.appVersion){
+          
+          Dialogs.confirmDialog(context, 
+            titleText: "Incompatible app", 
+            descriptionText: "Incompatible version off app and server. \n\nServer: $serverVersion \nApp: ${GlobalVariables.appVersion}\n\nDo you want do download compatible version from server?",
+            onCancel: (){
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            onSend: ()async{
+              await downloadApk(url+"/api/v1/apk/quizer.apk");
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
+          );
+          return;
+        }
 
         setState(() {
           loadingText = "Downloading\nquestions";
@@ -163,7 +185,7 @@ class _LoadingState extends State<Loading> {
       Fluttertoast.showToast(msg: "Can't connect to server! Timed out!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
     }
     else if(e.toString().startsWith("FormatException")){
-      Fluttertoast.showToast(msg: "Connected to IP but can't connect to Quizer server!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+      Fluttertoast.showToast(msg: "Format Exception!\n\nProbably connected to IP but can't connect to Quizer server or received html response!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
     }
     else if(e.toString().startsWith("SocketException")){
       Fluttertoast.showToast(msg: "URL not found!", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
@@ -173,6 +195,14 @@ class _LoadingState extends State<Loading> {
     }
     else{
       Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
+    }
+  }
+
+  downloadApk(url)async{
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(msg: "Can't open URL", toastLength: Toast.LENGTH_LONG, backgroundColor: Colors.red, textColor: Colors.white);
     }
   }
 }

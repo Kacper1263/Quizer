@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
@@ -100,18 +101,23 @@ class _ViewQuestionState extends State<ViewQuestion> {
           children: <Widget>[
             Text(question.question, style: TextStyle(color: Colors.white, fontSize: 30)),
             SizedBox(height: 20),
-            question.img == "null" ? Container() : Image.network("${data['url']}/api/v1/${question.img}",
-              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                if (loadingProgress == null)
-                  return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                        : null,
-                  ),
-                );
-              }
+            question.img == "null" ? Container() : //Image.network("${data['url']}/api/v1/${question.img}",
+            //   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+            //     if (loadingProgress == null)
+            //       return child;
+            //     return Center(
+            //       child: CircularProgressIndicator(
+            //         value: loadingProgress.expectedTotalBytes != null
+            //             ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+            //             : null,
+            //       ),
+            //     );
+            //   }
+            // ),
+            CachedNetworkImage(
+              imageUrl: "${data['url']}/api/v1/${question.img}",
+              placeholder: (context, url) => Center(child: CircularProgressIndicator(value: null)),
+              errorWidget: (context, url, error) => Icon(Icons.error_outline, color: Colors.red, size: 90,),              
             ),
             SizedBox(height: 30),
             OutlineButton(

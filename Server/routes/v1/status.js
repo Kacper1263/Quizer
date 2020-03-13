@@ -1,14 +1,16 @@
+//! Version config
+const appVersionMajor = 1;
+const appVersionMinor = 1;
+const appVersionPATCH = 0;
+const appVersion = `${appVersionMajor}.${appVersionMinor}.${appVersionPATCH}`;
+/// Version config
+
 const express = require('express')
 const fs = require('fs')
 const folderSize = require('get-folder-size')
 const router = express.Router()
 
-//#region Config variables
-var localtunnelEnabled = false;
-var tunnelUrlList = []
-var adminPassword = randomFromZeroToNine() + randomFromZeroToNine() + randomFromZeroToNine() + randomFromZeroToNine() //Generate 4 random numbers
 var databaseName = "questions"
-var apiPort = 5000;
 
 // Get data from config
 var cfg = fs.readFileSync("./config.json")
@@ -48,7 +50,8 @@ router.get("/", (req, res) => {
             message: "Server status",
             amountOfQuestions: db.get("questions").value().length,
             amountOfImages: fs.readdirSync("./img").length,
-            imagesSize: (size / 1024 / 1024).toFixed(2) + ' MB'
+            imagesSize: (size / 1024 / 1024).toFixed(2) + ' MB',
+            serverVersion: appVersion
         })
     })
 })
