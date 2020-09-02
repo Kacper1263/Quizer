@@ -77,9 +77,14 @@ catch{
 
 const localtunnel = require('localtunnel')
 var tunnelSubdomain = tunnelUrl || ""
+var tunnelUrlUWant
+var tunnelUrlUWantHttps
 
 //! OLD LT DOMAIN   if (tunnelSubdomain != "") var tunnelUrlUWant = `https://${tunnelSubdomain}.localtunnel.me`; //Full url for verification is domain in use
-if (tunnelSubdomain != "") var tunnelUrlUWant = `http://${tunnelSubdomain}.serverless.social`; //Full url for verification is domain in use
+if (tunnelSubdomain != "")  {
+    tunnelUrlUWant= `http://${tunnelSubdomain}.serverless.social`; //Full url for verification is domain in use
+    tunnelUrlUWantHttps= `https://${tunnelSubdomain}.serverless.social`; //Full url for verification is domain in use
+}
 
 //#region localtunnel stuff
 if (localtunnelEnabled) {
@@ -97,8 +102,8 @@ if (localtunnelEnabled) {
 
         if (tunnelSubdomain == "") tunnelUrlUWant = tunnel.url
 
-        if (tunnel.url != tunnelUrlUWant) {
-            console.log("Error! Subdomain in use!");
+        if (tunnel.url != tunnelUrlUWant && tunnel.url != tunnelUrlUWantHttps) {
+            console.log("Error! Subdomain in use! You want to use: " + tunnelUrlUWant + " but server started with: " + tunnel.url);
             readline.keyInPause("\nProgram ended...")
             process.exit();
         }
